@@ -1,0 +1,133 @@
+Start testing: Oct 20 17:56 CST
+----------------------------------------------------------
+1/16 Testing: test_module_contracts
+1/16 Test: test_module_contracts
+Command: "/tronlong/HansAiCameraApp/build_host/bin/test_module_contracts"
+Directory: /tronlong/HansAiCameraApp/build_host/tests
+"test_module_contracts" start time: Oct 20 17:56 CST
+Output:
+----------------------------------------------------------
+[PASS] save two instances of the same operator
+[PASS] load instance-based catalog
+[PASS] independent ROI, parameters and rules survive restart
+[PASS] all OCR criteria pass without executing OCR
+[PASS] different instance criterion yields NG
+[PASS] missing output is ERROR, not silent numeric zero
+[PASS] wrong parameter type rejected
+[PASS] module-specific ROI validator rejects invalid dimensions
+[PASS] fractional operator version cannot silently downgrade
+[PASS] invalid communication block is rejected instead of replaced by defaults
+[PASS] incompatible rule/output type rejected
+[PASS] inverted limits rejected before execution
+[PASS] legacy catalog migrates OCR criteria into explicit rules
+[PASS] legacy leading-zero target retains behavior
+[PASS] legacy minimum confidence retains behavior
+[PASS] bad load leaves current catalog intact
+[PASS] Modbus uses common admission policy
+[PASS] busy rejects all triggers
+[PASS] editing prevents manual trigger
+[PASS] manual testing remains available while automatic detection paused
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"test_module_contracts" end time: Oct 20 17:56 CST
+"test_module_contracts" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/16 Testing: test_yolov5_decoder
+3/16 Test: test_yolov5_decoder
+Command: "/tronlong/HansAiCameraApp/build_host/bin/test_yolov5_decoder"
+Directory: /tronlong/HansAiCameraApp/build_host/tests
+"test_yolov5_decoder" start time: Oct 20 17:56 CST
+Output:
+----------------------------------------------------------
+[PASS] one known candidate survives confidence filtering
+[PASS] argmax class and objectness times class probability
+[PASS] anchor/grid decoding stays in model-input pixel coordinates
+[PASS] decoder leaves label mapping and NMS to the common pipeline
+[PASS] no target returns an empty valid batch
+[PASS] anchor group is selected by stride rather than output order
+[PASS] explicit logits mode applies sigmoid exactly once
+[PASS] custom model anchors are honored
+[PASS] decoder returns candidates without silently running NMS
+[PASS] short output buffer rejected before indexed reads
+[PASS] duplicate scale rejected
+[PASS] different class counts rejected
+[PASS] unsupported output layout rejected
+[PASS] non-finite objectness rejected
+[PASS] zero model size rejected
+[PASS] invalid score threshold rejected
+[PASS] wrong activation option type rejected
+[PASS] malformed anchor settings rejected
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"test_yolov5_decoder" end time: Oct 20 17:56 CST
+"test_yolov5_decoder" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/16 Testing: test_detection_engine
+4/16 Test: test_detection_engine
+Command: "/tronlong/HansAiCameraApp/build_host/bin/test_detection_engine"
+Directory: /tronlong/HansAiCameraApp/build_host/tests
+"test_detection_engine" start time: Oct 20 17:56 CST
+Output:
+----------------------------------------------------------
+[PASS] registered decoder, label mapping and class-aware NMS form a complete pipeline
+[PASS] letterbox padding is removed before returning source-image boxes
+[PASS] RKNN receives contiguous NHWC RGB bytes, independent of native model layout
+[PASS] color conversion never mutates the shared inspection image
+[PASS] NHWC models and BGR-preserving preprocessing are supported
+[PASS] FLOAT32 input applies the configured normalization
+[PASS] FLOAT16 input retains normalized values
+[PASS] UINT8 never silently ignores custom normalization
+[PASS] stretch restores independent horizontal and vertical scales
+[PASS] mismatched class dictionaries are rejected
+[PASS] callers without a label dictionary receive an explicit class identifier
+[PASS] unregistered decoder is an error
+[PASS] invalid model-specific parameters are caught by the registered factory
+[PASS] detection is a real registered operator with valid defaults
+[PASS] operator validation reaches decoder-owned settings
+[PASS] inspection rules and preview polygons use the restored ROI coordinates
+[PASS] no target is a valid zero-count result and the configured rule yields NG
+[PASS] incompatible labels yield ERROR rather than false OK
+[PASS] missing models remain visible inspection errors
+[PASS] detector model and labels follow the existing portable YAML resource lifecycle
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"test_detection_engine" end time: Oct 20 17:56 CST
+"test_detection_engine" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/16 Testing: test_operator_editors
+7/16 Test: test_operator_editors
+Command: "/tronlong/HansAiCameraApp/build_host/bin/test_operator_editors"
+Directory: /tronlong/HansAiCameraApp/build_host/tests
+"test_operator_editors" start time: Oct 20 17:56 CST
+Output:
+----------------------------------------------------------
+[PASS] loading a form preserves values and emits no user edit
+[PASS] numeric field emits a single edit without slider rounding loss
+[PASS] actual operator page preserves two OCR instances and their distinct ROIs/resources
+[PASS] disabled rule remains visibly disabled after editing
+[PASS] selection changes do not overwrite other operator parameters
+[PASS] rebuilding editor list after removal preserves remaining instance
+[PASS] OCR uses the generic image editor without a custom factory
+[PASS] registered detection uses the shared image editor without a UI factory branch
+[PASS] detection model, labels and decoder-owned settings round-trip through generated controls
+[PASS] new image operators reuse ROI, file picker and parameter persistence without custom UI
+[PASS] ROI marking normalizes corners, selects region mode and preserves model configuration
+[PASS] loading another instance clears unfinished marking without changing its parameters
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"test_operator_editors" end time: Oct 20 17:56 CST
+"test_operator_editors" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 20 17:56 CST

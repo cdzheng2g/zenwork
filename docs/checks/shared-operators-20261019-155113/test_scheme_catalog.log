@@ -1,0 +1,16 @@
+[PASS] a new catalog has no phantom scheme
+[PASS] an unnamed scheme cannot be saved
+[PASS] a named scheme saves
+[PASS] only saved scheme appears in catalog
+[PASS] saved scheme becomes current
+[PASS] a configured OCR tool saves with its scheme
+[PASS] save execution settings
+[PASS] saved catalog reloads
+[PASS] internal trigger mode and interval survive reload
+[PASS] OR, reference and OCR settings survive reload
+[PASS] Modbus trigger and output survive a catalog reload
+[PASS] communication parameters are stored with the scheme
+[PASS] saved scheme persists across reload
+[PASS] saved tool list persists across reload
+[PASS] saved scheme can be deleted
+[PASS] deleted scheme no longer appears in catalog

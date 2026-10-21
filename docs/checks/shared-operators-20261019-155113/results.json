@@ -1,0 +1,62 @@
+[
+  {
+    "name": "test_rknn_session",
+    "exit": 0
+  },
+  {
+    "name": "test_image_pipeline",
+    "exit": 0
+  },
+  {
+    "name": "test_operator_editors",
+    "exit": 0
+  },
+  {
+    "name": "test_module_contracts",
+    "exit": 0
+  },
+  {
+    "name": "test_inspection_service",
+    "exit": 0
+  },
+  {
+    "name": "test_scheme_catalog",
+    "exit": 0
+  },
+  {
+    "name": "test_scheme_package",
+    "exit": 0
+  },
+  {
+    "name": "test_modbus_server",
+    "exit": 0
+  },
+  {
+    "name": "test_scheme_communication",
+    "exit": 0
+  },
+  {
+    "name": "test_inspection",
+    "exit": 0
+  },
+  {
+    "name": "test_position_correction",
+    "exit": 0
+  },
+  {
+    "name": "test_camera_stream_lease",
+    "exit": 0
+  },
+  {
+    "name": "test_reference_import",
+    "exit": 0
+  },
+  {
+    "name": "test_file_operations",
+    "exit": 0
+  },
+  {
+    "name": "test_ocr_regression",
+    "exit": 0
+  }
+]

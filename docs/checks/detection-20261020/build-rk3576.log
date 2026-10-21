@@ -1,0 +1,74 @@
+[  0%] Automatic MOC and UIC for target hans_rules
+[  0%] Automatic MOC and UIC for target hans_parameter_ui
+[  0%] Automatic MOC and UIC for target hans_inference
+[  1%] Automatic MOC and UIC for target hans_reference
+[  1%] Built target hans_rules_autogen
+[  1%] Built target hans_reference_autogen
+[  1%] Built target hans_parameter_ui_autogen
+[  1%] Built target hans_inference_autogen
+[  1%] Automatic MOC and UIC for target ElaWidgetTools
+[  1%] Built target hans_reference
+[  2%] Automatic MOC and UIC for target yaml-cpp
+[  2%] Automatic MOC and UIC for target hans_protocols
+[  2%] Built target yaml-cpp_autogen
+[  3%] Built target hans_inference
+[  3%] Built target hans_protocols_autogen
+[  5%] Built target hans_parameter_ui
+[  6%] Built target hans_rules
+[ 14%] Automatic MOC and UIC for target hans_operators
+[ 15%] Built target yaml-cpp
+[ 19%] Built target hans_protocols
+[ 19%] Built target ElaWidgetTools_autogen
+[ 19%] Built target hans_operators_autogen
+[ 19%] Automatic MOC and UIC for target hans_yaml
+[ 20%] Building CXX object src/CMakeFiles/hans_operators.dir/application/vision/detection/DetectionEngine.cpp.o
+[ 20%] Built target hans_yaml_autogen
+[ 77%] Built target ElaWidgetTools
+[ 79%] Built target hans_yaml
+[ 80%] Linking CXX static library libhans_operators.a
+[ 85%] Built target hans_operators
+[ 85%] Automatic MOC and UIC for target hans_operator_editors
+[ 85%] Automatic MOC and UIC for target hans_schemes
+[ 87%] Automatic MOC and UIC for target hans_runtime
+[ 87%] Built target hans_runtime_autogen
+[ 87%] Built target hans_operator_editors_autogen
+[ 87%] Built target hans_schemes_autogen
+[ 88%] Built target hans_runtime
+[ 90%] Built target hans_operator_editors
+[ 90%] Built target hans_schemes
+[ 92%] Automatic MOC and UIC for target HansAiCameraApp
+[ 92%] Built target HansAiCameraApp_autogen
+Consolidate compiler generated dependencies of target HansAiCameraApp
+[ 92%] Linking CXX executable ../bin/HansAiCameraApp
+[100%] Built target HansAiCameraApp
+[  0%] Automatic MOC and UIC for target hans_protocols
+[  0%] Automatic MOC and UIC for target hans_rules
+[  0%] Automatic MOC and UIC for target hans_inference
+[  4%] Automatic MOC and UIC for target yaml-cpp
+[  4%] Built target hans_protocols_autogen
+[  4%] Built target hans_rules_autogen
+[  4%] Built target yaml-cpp_autogen
+[  4%] Built target hans_inference_autogen
+[  8%] Built target hans_rules
+[ 20%] Built target hans_protocols
+[ 25%] Built target hans_inference
+[ 54%] Built target yaml-cpp
+[ 54%] Automatic MOC and UIC for target hans_operators
+[ 54%] Automatic MOC and UIC for target hans_yaml
+[ 54%] Built target hans_operators_autogen
+[ 54%] Built target hans_yaml_autogen
+Consolidate compiler generated dependencies of target hans_operators
+[ 58%] Built target hans_yaml
+[ 83%] Built target hans_operators
+[ 83%] Automatic MOC and UIC for target hans_schemes
+[ 87%] Automatic MOC and UIC for target hans_runtime
+[ 87%] Built target hans_schemes_autogen
+[ 87%] Built target hans_runtime_autogen
+[ 91%] Built target hans_schemes
+[ 95%] Built target hans_runtime
+[ 95%] Automatic MOC and UIC for target test_detection_engine
+[ 95%] Built target test_detection_engine_autogen
+Consolidate compiler generated dependencies of target test_detection_engine
+[100%] Building CXX object tests/CMakeFiles/test_detection_engine.dir/test_detection_engine.cpp.o
+[100%] Linking CXX executable ../bin/test_detection_engine
+[100%] Built target test_detection_engine

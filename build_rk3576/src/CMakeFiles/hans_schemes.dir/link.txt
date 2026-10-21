@@ -1,0 +1,2 @@
+/usr/bin/aarch64-linux-gnu-ar qc libhans_schemes.a CMakeFiles/hans_schemes.dir/hans_schemes_autogen/mocs_compilation.cpp.o CMakeFiles/hans_schemes.dir/application/scheme/SchemeCatalog.cpp.o CMakeFiles/hans_schemes.dir/application/scheme/SchemePackage.cpp.o CMakeFiles/hans_schemes.dir/application/scheme/SchemeAssetStore.cpp.o
+/usr/bin/aarch64-linux-gnu-ranlib libhans_schemes.a

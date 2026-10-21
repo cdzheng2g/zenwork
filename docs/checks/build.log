@@ -1,0 +1,226 @@
+-- Found OpenCV: /tronlong/sys_ub/sysroots/armv8a-linux/usr (found version "4.5.4") found components: core imgproc imgcodecs 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tronlong/HansAiCameraApp/build_rk3576
+[  1%] Automatic MOC and UIC for target ElaWidgetTools
+[  2%] Automatic MOC and UIC for target yaml-cpp
+[  2%] Automatic MOC and UIC for target qtpinyin
+[  3%] Automatic MOC and UIC for target hans_rules
+[  3%] Built target qtpinyin_autogen
+[  3%] Built target yaml-cpp_autogen
+[  3%] Built target hans_rules_autogen
+[  3%] Automatic MOC and UIC for target hans_parameter_ui
+[  3%] Automatic MOC and UIC for target hans_protocols
+[  3%] Automatic MOC and UIC for target hans_reference
+[  3%] Built target hans_reference_autogen
+[  3%] Automatic MOC and UIC for target CamVoViProbe
+[  3%] Built target CamVoViProbe_autogen
+[  3%] Built target ElaWidgetTools_autogen
+Consolidate compiler generated dependencies of target yaml-cpp
+Consolidate compiler generated dependencies of target qtpinyin
+[  7%] Built target qtpinyin
+[ 15%] Built target yaml-cpp
+Consolidate compiler generated dependencies of target hans_rules
+Consolidate compiler generated dependencies of target hans_reference
+[ 15%] Building CXX object src/CMakeFiles/hans_reference.dir/infrastructure/reference/ReferenceImageManager.cpp.o
+[ 16%] Building CXX object src/CMakeFiles/hans_rules.dir/modules/rules/RuleRegistry.cpp.o
+[ 16%] Built target hans_protocols_autogen
+[ 16%] Built target hans_parameter_ui_autogen
+Consolidate compiler generated dependencies of target CamVoViProbe
+[ 16%] Building CXX object src/CMakeFiles/CamVoViProbe.dir/tools/CamVoViProbe.cpp.o
+[ 17%] Automatic MOC and UIC for target hans_yaml
+[ 17%] Built target hans_yaml_autogen
+Consolidate compiler generated dependencies of target ElaWidgetTools
+[ 17%] Linking CXX executable ../bin/CamVoViProbe
+[ 64%] Built target ElaWidgetTools
+[ 64%] Automatic MOC and UIC for target Qt5SoftKeyboard
+[ 64%] Built target Qt5SoftKeyboard_autogen
+Consolidate compiler generated dependencies of target hans_protocols
+[ 65%] Building CXX object src/CMakeFiles/hans_protocols.dir/hans_protocols_autogen/mocs_compilation.cpp.o
+[ 65%] Built target CamVoViProbe
+Consolidate compiler generated dependencies of target hans_parameter_ui
+[ 65%] Building CXX object src/CMakeFiles/hans_parameter_ui.dir/hans_parameter_ui_autogen/mocs_compilation.cpp.o
+[ 65%] Building CXX object src/CMakeFiles/hans_rules.dir/modules/rules/BuiltinRules.cpp.o
+[ 65%] Building CXX object src/CMakeFiles/hans_protocols.dir/infrastructure/communication/TcpServerService.cpp.o
+[ 66%] Building CXX object src/CMakeFiles/hans_parameter_ui.dir/ui/components/NumericParameterField.cpp.o
+[ 66%] Linking CXX static library libhans_reference.a
+[ 67%] Built target hans_reference
+[ 67%] Building CXX object src/CMakeFiles/hans_parameter_ui.dir/ui/components/ParameterForm.cpp.o
+[ 67%] Building CXX object src/CMakeFiles/hans_protocols.dir/infrastructure/communication/ModbusTcpOutputService.cpp.o
+[ 67%] Building CXX object src/CMakeFiles/hans_rules.dir/app/RegisterRules.cpp.o
+[ 67%] Building CXX object src/CMakeFiles/hans_protocols.dir/infrastructure/communication/ModbusTcpServerService.cpp.o
+[ 68%] Building CXX object src/CMakeFiles/hans_protocols.dir/infrastructure/communication/TcpResultPublisher.cpp.o
+[ 68%] Linking CXX static library libhans_parameter_ui.a
+[ 68%] Built target hans_parameter_ui
+[ 68%] Linking CXX static library libhans_rules.a
+Consolidate compiler generated dependencies of target hans_yaml
+[ 68%] Building CXX object CMakeFiles/hans_yaml.dir/src/infrastructure/persistence/YamlDocument.cpp.o
+[ 68%] Built target hans_rules
+Consolidate compiler generated dependencies of target Qt5SoftKeyboard
+[ 71%] Built target Qt5SoftKeyboard
+[ 71%] Automatic MOC and UIC for target hans_operators
+[ 71%] Built target hans_operators_autogen
+Consolidate compiler generated dependencies of target hans_operators
+[ 71%] Building CXX object src/CMakeFiles/hans_operators.dir/application/InspectionRunner.cpp.o
+[ 71%] Building CXX object src/CMakeFiles/hans_protocols.dir/application/communication/ResultOutputDispatcher.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/hans_operators.dir/application/operators/OperatorRegistry.cpp.o
+[ 72%] Linking CXX static library libhans_yaml.a
+[ 72%] Built target hans_yaml
+[ 72%] Building CXX object src/CMakeFiles/hans_operators.dir/application/operators/OperatorGeometry.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/hans_protocols.dir/app/RegisterCommunication.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/hans_operators.dir/modules/operators/ocr/OcrOperator.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/hans_operators.dir/modules/operators/ocr/OcrEngine.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/hans_protocols.dir/modules/communication/tcp/TcpModule.cpp.o
+[ 73%] Building CXX object src/CMakeFiles/hans_operators.dir/modules/operators/ocr/OcrModule.cpp.o
+[ 74%] Building CXX object src/CMakeFiles/hans_protocols.dir/modules/communication/modbus/ModbusClientModule.cpp.o
+[ 74%] Building CXX object src/CMakeFiles/hans_protocols.dir/modules/communication/modbus/ModbusServerModule.cpp.o
+[ 74%] Building CXX object src/CMakeFiles/hans_operators.dir/modules/operators/template_match/TemplateOperator.cpp.o
+[ 74%] Building CXX object src/CMakeFiles/hans_operators.dir/modules/operators/template_match/TemplateModule.cpp.o
+[ 74%] Building CXX object src/CMakeFiles/hans_operators.dir/app/RegisterOperators.cpp.o
+[ 74%] Linking CXX static library libhans_protocols.a
+[ 74%] Built target hans_protocols
+[ 75%] Building CXX object src/CMakeFiles/hans_operators.dir/modules/operators/template_match/TemplateMatchCorrector.cpp.o
+[ 75%] Building CXX object src/CMakeFiles/hans_operators.dir/domain/project/LogicEvaluator.cpp.o
+[ 75%] Linking CXX static library libhans_operators.a
+[ 75%] Built target hans_operators
+[ 75%] Automatic MOC and UIC for target hans_operator_editors
+[ 75%] Automatic MOC and UIC for target hans_schemes
+[ 75%] Automatic MOC and UIC for target hans_runtime
+[ 75%] Automatic MOC and UIC for target test_template_performance
+[ 75%] Built target hans_operator_editors_autogen
+[ 75%] Built target hans_schemes_autogen
+Consolidate compiler generated dependencies of target hans_operator_editors
+Consolidate compiler generated dependencies of target hans_schemes
+[ 75%] Built target test_template_performance_autogen
+[ 75%] Building CXX object src/CMakeFiles/hans_operator_editors.dir/app/RegisterOperatorEditors.cpp.o
+[ 75%] Building CXX object src/CMakeFiles/hans_schemes.dir/application/scheme/SchemeCatalog.cpp.o
+Consolidate compiler generated dependencies of target test_template_performance
+[ 76%] Building CXX object tests/CMakeFiles/test_template_performance.dir/test_template_performance_autogen/mocs_compilation.cpp.o
+[ 76%] Building CXX object tests/CMakeFiles/test_template_performance.dir/test_template_performance.cpp.o
+[ 76%] Built target hans_runtime_autogen
+[ 76%] Building CXX object src/CMakeFiles/hans_operator_editors.dir/ui/operators/RuleSetEditor.cpp.o
+Consolidate compiler generated dependencies of target hans_runtime
+[ 76%] Building CXX object src/CMakeFiles/hans_runtime.dir/hans_runtime_autogen/mocs_compilation.cpp.o
+[ 76%] Linking CXX executable ../bin/test_template_performance
+[ 76%] Building CXX object src/CMakeFiles/hans_operator_editors.dir/modules/operators/ocr/OcrOperatorPanel.cpp.o
+[ 76%] Building CXX object src/CMakeFiles/hans_schemes.dir/application/scheme/SchemePackage.cpp.o
+[ 76%] Built target test_template_performance
+[ 76%] Building CXX object src/CMakeFiles/hans_schemes.dir/application/scheme/SchemeAssetStore.cpp.o
+[ 76%] Building CXX object src/CMakeFiles/hans_runtime.dir/application/inspection/InspectionService.cpp.o
+[ 76%] Building CXX object src/CMakeFiles/hans_runtime.dir/application/InternalTrigger.cpp.o
+[ 77%] Linking CXX static library libhans_operator_editors.a
+[ 78%] Built target hans_operator_editors
+[ 79%] Building CXX object src/CMakeFiles/hans_runtime.dir/application/communication/SchemeCommunicationRuntime.cpp.o
+[ 80%] Linking CXX static library libhans_schemes.a
+[ 81%] Built target hans_schemes
+[ 81%] Building CXX object src/CMakeFiles/hans_runtime.dir/infrastructure/persistence/InspectionArchive.cpp.o
+[ 81%] Linking CXX static library libhans_runtime.a
+[ 81%] Built target hans_runtime
+[ 81%] Automatic MOC and UIC for target test_inspection_service
+[ 82%] Automatic MOC and UIC for target HansAiCameraApp
+[ 82%] Automatic MOC and UIC for target test_module_contracts
+[ 83%] Automatic MOC and UIC for target test_operator_editors
+[ 83%] Built target test_module_contracts_autogen
+[ 83%] Built target test_inspection_service_autogen
+[ 83%] Automatic MOC and UIC for target test_scheme_package
+[ 84%] Automatic MOC and UIC for target test_scheme_catalog
+[ 84%] Built target test_scheme_catalog_autogen
+[ 84%] Built target test_scheme_package_autogen
+[ 84%] Automatic MOC and UIC for target test_scheme_communication
+[ 84%] Automatic MOC and UIC for target test_modbus_server
+[ 84%] Built target test_scheme_communication_autogen
+[ 84%] Built target test_modbus_server_autogen
+[ 84%] Automatic MOC and UIC for target test_inspection
+[ 84%] Built target test_inspection_autogen
+[ 85%] Automatic MOC and UIC for target test_position_correction
+[ 85%] Automatic MOC and UIC for target test_camera_stream_lease
+[ 85%] Built target test_operator_editors_autogen
+[ 85%] Built target test_position_correction_autogen
+[ 85%] Built target test_camera_stream_lease_autogen
+[ 85%] Automatic MOC and UIC for target test_file_operations
+[ 86%] Automatic MOC and UIC for target test_reference_import
+Consolidate compiler generated dependencies of target test_module_contracts
+[ 86%] Built target test_file_operations_autogen
+[ 86%] Built target test_reference_import_autogen
+[ 86%] Building CXX object tests/CMakeFiles/test_module_contracts.dir/test_module_contracts.cpp.o
+Consolidate compiler generated dependencies of target test_inspection_service
+Consolidate compiler generated dependencies of target test_operator_editors
+[ 86%] Building CXX object tests/CMakeFiles/test_operator_editors.dir/test_operator_editors_autogen/mocs_compilation.cpp.o
+[ 86%] Building CXX object tests/CMakeFiles/test_inspection_service.dir/test_inspection_service.cpp.o
+[ 86%] Built target HansAiCameraApp_autogen
+Consolidate compiler generated dependencies of target test_scheme_catalog
+[ 86%] Building CXX object tests/CMakeFiles/test_scheme_catalog.dir/test_scheme_catalog.cpp.o
+[ 86%] Linking CXX executable ../bin/test_scheme_catalog
+[ 86%] Built target test_scheme_catalog
+Consolidate compiler generated dependencies of target test_scheme_package
+[ 86%] Building CXX object tests/CMakeFiles/test_scheme_package.dir/test_scheme_package.cpp.o
+[ 87%] Building CXX object tests/CMakeFiles/test_operator_editors.dir/test_operator_editors.cpp.o
+[ 87%] Linking CXX executable ../bin/test_inspection_service
+[ 87%] Linking CXX executable ../bin/test_module_contracts
+[ 88%] Built target test_inspection_service
+Consolidate compiler generated dependencies of target test_modbus_server
+[ 88%] Building CXX object tests/CMakeFiles/test_modbus_server.dir/test_modbus_server.cpp.o
+[ 89%] Built target test_module_contracts
+Consolidate compiler generated dependencies of target test_scheme_communication
+[ 89%] Building CXX object tests/CMakeFiles/test_scheme_communication.dir/test_scheme_communication.cpp.o
+[ 89%] Linking CXX executable ../bin/test_modbus_server
+[ 90%] Built target test_modbus_server
+Consolidate compiler generated dependencies of target test_inspection
+[ 90%] Building CXX object tests/CMakeFiles/test_inspection.dir/test_inspection.cpp.o
+[ 90%] Linking CXX executable ../bin/test_scheme_communication
+[ 90%] Linking CXX executable ../bin/test_scheme_package
+[ 90%] Built target test_scheme_communication
+Consolidate compiler generated dependencies of target test_position_correction
+[ 90%] Building CXX object tests/CMakeFiles/test_position_correction.dir/test_position_correction.cpp.o
+[ 90%] Building CXX object tests/CMakeFiles/test_operator_editors.dir/__/src/ui/pages/AlgorithmConfigPage.cpp.o
+[ 91%] Built target test_scheme_package
+Consolidate compiler generated dependencies of target test_camera_stream_lease
+[ 92%] Building CXX object tests/CMakeFiles/test_camera_stream_lease.dir/test_camera_stream_lease.cpp.o
+[ 92%] Building CXX object tests/CMakeFiles/test_camera_stream_lease.dir/__/src/infrastructure/camera/CameraStreamLease.cpp.o
+[ 92%] Linking CXX executable ../bin/test_camera_stream_lease
+[ 92%] Built target test_camera_stream_lease
+Consolidate compiler generated dependencies of target test_reference_import
+[ 92%] Building CXX object tests/CMakeFiles/test_reference_import.dir/test_reference_import.cpp.o
+[ 92%] Linking CXX executable ../bin/test_position_correction
+[ 92%] Linking CXX executable ../bin/test_inspection
+[ 92%] Built target test_position_correction
+[ 92%] Building CXX object tests/CMakeFiles/test_operator_editors.dir/__/src/ui/ImageCanvasWidget.cpp.o
+[ 93%] Built target test_inspection
+Consolidate compiler generated dependencies of target test_file_operations
+[ 93%] Building CXX object tests/CMakeFiles/test_file_operations.dir/test_file_operations.cpp.o
+[ 93%] Linking CXX executable ../bin/test_reference_import
+[ 93%] Built target test_reference_import
+Consolidate compiler generated dependencies of target HansAiCameraApp
+[ 93%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/HansAiCameraApp_autogen/mocs_compilation.cpp.o
+[ 93%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/main.cpp.o
+[ 93%] Linking CXX executable ../bin/test_operator_editors
+[ 93%] Built target test_operator_editors
+[ 93%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/inspection/WorkbenchModbus.cpp.o
+[ 93%] Linking CXX executable ../bin/test_file_operations
+[ 94%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/LoginWindow.cpp.o
+[ 94%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/ImageCanvasWidget.cpp.o
+[ 95%] Built target test_file_operations
+[ 95%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/pages/ReferenceManagePage.cpp.o
+[ 95%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/pages/CameraSettingsPage.cpp.o
+[ 96%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/pages/CommunicationSettingsPage.cpp.o
+[ 96%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/communication/CommunicationPanelRegistry.cpp.o
+[ 96%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/pages/AlgorithmConfigPage.cpp.o
+[ 96%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/MainWindow.cpp.o
+[ 97%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/WorkbenchWidget.cpp.o
+[ 97%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/layout/WorkbenchLayout.cpp.o
+[ 97%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/scheme/WorkbenchSchemes.cpp.o
+[ 97%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/inspection/WorkbenchInspection.cpp.o
+[ 98%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/files/WorkbenchFiles.cpp.o
+[ 98%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/LiveMonitorWidget.cpp.o
+[ 98%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/ui/workbench/ImageInputPanel.cpp.o
+[ 98%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/auth/AccountManager.cpp.o
+[ 98%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/system/SystemResourceMonitor.cpp.o
+[ 99%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/camera/CameraController.cpp.o
+[ 99%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/camera/CameraStreamWorker.cpp.o
+[ 99%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/camera/CameraStreamLease.cpp.o
+[ 99%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/camera/CameraStreamService.cpp.o
+[100%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/camera/CameraParamsStore.cpp.o
+[100%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/infrastructure/input/ImageSequenceSource.cpp.o
+[100%] Building CXX object src/CMakeFiles/HansAiCameraApp.dir/app/CreateInspectionService.cpp.o
+[100%] Linking CXX executable ../bin/HansAiCameraApp
+[100%] Built target HansAiCameraApp

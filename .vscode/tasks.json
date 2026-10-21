@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake: 更新补全数据库",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "-S",
+                "${workspaceFolder}",
+                "-B",
+                "${workspaceFolder}/build_rk3576",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/toolchain_aarch64_rk3576.cmake",
+                "-DQT_SDK_DIR=/tronlong/sys_ub/sysroots/armv8a-linux/usr",
+                "-DHOST_QT_BIN_DIR=/tronlong/sys_ub/sysroots/x86_64-linux/bin",
+                "-DROCKIT_MPI_SDK_DIR=/home/zen/下载/rk_mpi/mpi/sdk",
+                "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
+                "-DBUILD_POSITION_CORRECTION_TEST=ON"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "编译 RK3576 相机应用",
+            "type": "process",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build_rk3576",
+                "--target",
+                "HansAiCameraApp",
+                "-j2"
+            ],
+            "dependsOn": "CMake: 更新补全数据库",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+  "scope": "src/tests .h/.hpp/.cpp/.cc/.cxx/.c; nonblank includes comments; excludes third_party, resources, build, backups and docs/examples",
+  "current": {
+    "src": {
+      "files": 157,
+      "physical_lines": 11791,
+      "nonblank_lines": 10757
+    },
+    "tests": {
+      "files": 15,
+      "physical_lines": 1398,
+      "nonblank_lines": 1345
+    }
+  },
+  "original": {
+    "src": {
+      "files": 131,
+      "physical_lines": 11920,
+      "nonblank_lines": 10497
+    },
+    "tests": {
+      "files": 13,
+      "physical_lines": 815,
+      "nonblank_lines": 751
+    }
+  },
+  "before_shared_operators_20261019": {
+    "src": {
+      "files": 144,
+      "physical_lines": 11314,
+      "nonblank_lines": 10313
+    },
+    "tests": {
+      "files": 13,
+      "physical_lines": 1147,
+      "nonblank_lines": 1100
+    }
+  },
+  "updated": "2026-10-19"
+}

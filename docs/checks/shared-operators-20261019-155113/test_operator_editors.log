@@ -1,0 +1,10 @@
+[PASS] loading a form preserves values and emits no user edit
+[PASS] numeric field emits a single edit without slider rounding loss
+[PASS] actual operator page preserves two OCR instances and their distinct ROIs/resources
+[PASS] disabled rule remains visibly disabled after editing
+[PASS] selection changes do not overwrite other operator parameters
+[PASS] rebuilding editor list after removal preserves remaining instance
+[PASS] OCR uses the generic image editor without a custom factory
+[PASS] new image operators reuse ROI, file picker and parameter persistence without custom UI
+[PASS] ROI marking normalizes corners, selects region mode and preserves model configuration
+[PASS] loading another instance clears unfinished marking without changing its parameters

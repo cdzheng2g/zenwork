@@ -1,0 +1,8 @@
+[PASS] unchanged model reused; multiple inputs and detection heads exposed
+[PASS] all outputs are copied before SDK buffers are released
+[PASS] native metadata retained while returned values are float32
+[PASS] failed replacement destroys partial context and keeps old model usable
+[PASS] failed replacement destroys partial context and keeps old model usable
+[PASS] wrong input byte count rejected before submission
+[PASS] invalid output also releases every SDK buffer
+[PASS] session destructor releases the live model

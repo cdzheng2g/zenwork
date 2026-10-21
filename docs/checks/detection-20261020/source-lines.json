@@ -1,0 +1,23 @@
+{
+  "before": {
+    "src": [
+      167,
+      12360
+    ],
+    "tests": [
+      16,
+      1516
+    ]
+  },
+  "after": {
+    "src": [
+      168,
+      12451
+    ],
+    "tests": [
+      17,
+      1732
+    ]
+  },
+  "counting": "Physical lines including blanks/comments; src and tests C/C++ files only; excludes third_party, docs and builds"
+}

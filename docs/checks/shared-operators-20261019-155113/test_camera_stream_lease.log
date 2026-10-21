@@ -1,0 +1,8 @@
+[PASS] first consumer starts capture
+[PASS] second consumer reuses running capture
+[PASS] two consumers are tracked
+[PASS] releasing one consumer preserves capture
+[PASS] one consumer remains
+[PASS] last consumer stops capture
+[PASS] all consumers are released
+[PASS] extra release does not request another stop

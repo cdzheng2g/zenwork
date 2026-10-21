@@ -1,0 +1,3 @@
+[PASS] blocked UI queues only one frame delivery
+[PASS] blocked UI keeps latest frame, discards stale frames
+[PASS] frame delivery resumes after draining mailbox

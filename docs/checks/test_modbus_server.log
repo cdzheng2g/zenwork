@@ -1,0 +1,19 @@
+[PASS] TCP server listens
+[PASS] starting an active server is idempotent
+[PASS] registers begin with no result and protocol version 1
+[PASS] ready state is readable
+[PASS] rising edge triggers once
+[PASS] repeated high value does not trigger twice
+[PASS] other bits do not produce a rising edge
+[PASS] zero rearms the next trigger
+[PASS] client cannot overwrite application results
+[PASS] reserved and unmapped writes are rejected
+[PASS] busy state, rejected count and trigger reply are readable
+[PASS] inspection result updates the register map
+[PASS] NG, 32-bit sequence and duration survive the 16-bit boundary
+[PASS] not-ready response counts separately from accepted triggers
+[PASS] stopped service reports a publish failure
+[PASS] service restarts
+[PASS] client reconnects
+[PASS] restart clears the command bit for the first new trigger
+[PASS] restart preserves result counters within the process

@@ -1,0 +1,4 @@
+[PASS] a model name cannot escape its reference directory
+[PASS] a model name cannot contain a path separator
+[PASS] a normal model name remains valid
+[PASS] an empty live frame fails cleanly instead of terminating the application

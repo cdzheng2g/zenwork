@@ -1,0 +1,20 @@
+[PASS] save two instances of the same operator
+[PASS] load instance-based catalog
+[PASS] independent ROI, parameters and rules survive restart
+[PASS] all OCR criteria pass without executing OCR
+[PASS] different instance criterion yields NG
+[PASS] missing output is ERROR, not silent numeric zero
+[PASS] wrong parameter type rejected
+[PASS] module-specific ROI validator rejects invalid dimensions
+[PASS] fractional operator version cannot silently downgrade
+[PASS] invalid communication block is rejected instead of replaced by defaults
+[PASS] incompatible rule/output type rejected
+[PASS] inverted limits rejected before execution
+[PASS] legacy catalog migrates OCR criteria into explicit rules
+[PASS] legacy leading-zero target retains behavior
+[PASS] legacy minimum confidence retains behavior
+[PASS] bad load leaves current catalog intact
+[PASS] Modbus uses common admission policy
+[PASS] busy rejects all triggers
+[PASS] editing prevents manual trigger
+[PASS] manual testing remains available while automatic detection paused

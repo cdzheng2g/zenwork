@@ -1,0 +1,6 @@
+PASS real template matches identical image
+PASS non-UUID legacy IDs cannot overwrite another operator state
+PASS template overlay maps to the translated input frame
+PASS blank target is NG
+PASS missing frame is explicit ERROR
+PASS missing reference is explicit ERROR

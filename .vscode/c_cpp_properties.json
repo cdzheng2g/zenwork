@@ -1,0 +1,40 @@
+{
+    "configurations": [
+        {
+            "name": "RK3576",
+            "compilerPath": "/usr/bin/aarch64-linux-gnu-g++",
+            "compilerArgs": [
+                "--sysroot=/tronlong/sys_ub/sysroots/armv8a-linux",
+                "-fPIC"
+            ],
+            "intelliSenseMode": "linux-gcc-arm64",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "compileCommands": "${workspaceFolder}/build_rk3576/compile_commands.json",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/third_party/rknn/include",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/opencv4",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtCore",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtGui",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtWidgets",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtNetwork",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtConcurrent",
+                "/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtSerialBus"
+            ],
+            "defines": [
+                "QT_CORE_LIB",
+                "QT_GUI_LIB",
+                "QT_WIDGETS_LIB"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/src"
+                ],
+                "limitSymbolsToIncludedHeaders": false
+            }
+        }
+    ],
+    "version": 4
+}

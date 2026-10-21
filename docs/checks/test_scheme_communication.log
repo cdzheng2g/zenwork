@@ -1,0 +1,11 @@
+[PASS] saved scheme automatically starts its listeners
+[PASS] computer connects to automatic TCP listener
+[PASS] reapplying an unchanged scheme preserves connected clients
+[PASS] conflicting ports are rejected before disturbing the current scheme
+[PASS] switching schemes can swap listener ports without a bind conflict
+[PASS] trigger-only Modbus remains listening with result output disabled
+[PASS] a scheme without output or Modbus trigger releases unused services
+[PASS] client scheme automatically connects to the configured server
+[PASS] automatic client connection publishes inspection data
+[PASS] removing the last scheme stops its services
+[PASS] occupied ports produce a visible error instead of claiming success

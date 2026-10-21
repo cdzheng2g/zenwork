@@ -1,0 +1,11 @@
+[PASS] no frame rejects trigger
+[PASS] first trigger accepted
+[PASS] overlapping request rejected
+[PASS] background execution completes
+[PASS] worker owns frame snapshot and delivers once
+[PASS] background execution completes
+[PASS] switching scheme discards old in-flight result
+[PASS] background execution completes
+[PASS] single-tool test never sends production output
+[PASS] background execution completes
+[PASS] discarded and test results do not advance production sequence

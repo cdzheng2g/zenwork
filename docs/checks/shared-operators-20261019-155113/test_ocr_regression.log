@@ -1,0 +1,3 @@
+PASS OCR mode 0: text=ABC123, confidence=0.83146159, exact result match
+PASS OCR mode 1: text=ABC123, confidence=0.83146159, exact result match
+PASS OCR mode 2: text=ABC123, confidence=0.82999674, exact result match

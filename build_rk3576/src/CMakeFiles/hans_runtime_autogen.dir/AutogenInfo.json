@@ -1,0 +1,142 @@
+{
+	"BUILD_DIR" : "/tronlong/HansAiCameraApp/build_rk3576/src/hans_runtime_autogen",
+	"CMAKE_BINARY_DIR" : "/tronlong/HansAiCameraApp/build_rk3576",
+	"CMAKE_CURRENT_BINARY_DIR" : "/tronlong/HansAiCameraApp/build_rk3576/src",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/tronlong/HansAiCameraApp/src",
+	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/tronlong/HansAiCameraApp/src/CMakeLists.txt",
+		"/tronlong/HansAiCameraApp/src/Modules.cmake"
+	],
+	"CMAKE_SOURCE_DIR" : "/tronlong/HansAiCameraApp",
+	"DEP_FILE" : "",
+	"DEP_FILE_RULE_NAME" : "",
+	"HEADERS" : 
+	[
+		[
+			"/tronlong/HansAiCameraApp/src/application/InternalTrigger.h",
+			"MU",
+			"WTMXIFCN4H/moc_InternalTrigger.cpp",
+			null
+		],
+		[
+			"/tronlong/HansAiCameraApp/src/application/communication/SchemeCommunicationRuntime.h",
+			"MU",
+			"XRXXKASGWM/moc_SchemeCommunicationRuntime.cpp",
+			null
+		],
+		[
+			"/tronlong/HansAiCameraApp/src/application/inspection/InspectionService.h",
+			"MU",
+			"JIZWZ2R37Q/moc_InspectionService.cpp",
+			null
+		],
+		[
+			"/tronlong/HansAiCameraApp/src/infrastructure/persistence/InspectionArchive.h",
+			"MU",
+			"4D5ZQIJYJX/moc_InspectionArchive.cpp",
+			null
+		]
+	],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/tronlong/HansAiCameraApp/build_rk3576/src/hans_runtime_autogen/include",
+	"MOC_COMPILATION_FILE" : "/tronlong/HansAiCameraApp/build_rk3576/src/hans_runtime_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"QT_CONCURRENT_LIB",
+		"QT_CORE_LIB",
+		"QT_NETWORK_LIB",
+		"QT_NO_DEBUG",
+		"QT_SERIALBUS_LIB"
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/tronlong/HansAiCameraApp/src",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtCore",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/opencv4",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtNetwork",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtSerialBus",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu/qt5/QtConcurrent",
+		"/usr/aarch64-linux-gnu/include/c++/11",
+		"/usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu",
+		"/usr/aarch64-linux-gnu/include/c++/11/backward",
+		"/usr/lib/gcc-cross/aarch64-linux-gnu/11/include",
+		"/usr/aarch64-linux-gnu/include",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include/aarch64-linux-gnu",
+		"/tronlong/sys_ub/sysroots/armv8a-linux/usr/include"
+	],
+	"MOC_MACRO_NAMES" : [ "Q_OBJECT", "Q_GADGET", "Q_NAMESPACE", "Q_NAMESPACE_EXPORT" ],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/aarch64-linux-gnu-g++",
+		"-dM",
+		"-E",
+		"-c",
+		"/usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/tronlong/HansAiCameraApp/build_rk3576/src/hans_runtime_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : 
+	[
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_inference_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_operators_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_protocols_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_rules_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_schemes_autogen/mocs_compilation.cpp"
+	],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 4,
+	"PARSE_CACHE_FILE" : "/tronlong/HansAiCameraApp/build_rk3576/src/CMakeFiles/hans_runtime_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/tronlong/sys_ub/sysroots/x86_64-linux/bin/moc",
+	"QT_UIC_EXECUTABLE" : "/tronlong/sys_ub/sysroots/x86_64-linux/bin/uic",
+	"QT_VERSION_MAJOR" : 5,
+	"QT_VERSION_MINOR" : 15,
+	"SETTINGS_FILE" : "/tronlong/HansAiCameraApp/build_rk3576/src/CMakeFiles/hans_runtime_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/tronlong/HansAiCameraApp/src/application/InternalTrigger.cpp",
+			"MU",
+			null
+		],
+		[
+			"/tronlong/HansAiCameraApp/src/application/communication/SchemeCommunicationRuntime.cpp",
+			"MU",
+			null
+		],
+		[
+			"/tronlong/HansAiCameraApp/src/application/inspection/InspectionService.cpp",
+			"MU",
+			null
+		],
+		[
+			"/tronlong/HansAiCameraApp/src/infrastructure/persistence/InspectionArchive.cpp",
+			"MU",
+			null
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : 
+	[
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_inference_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_operators_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_protocols_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_rules_autogen/mocs_compilation.cpp",
+		"/tronlong/HansAiCameraApp/build_rk3576/src/hans_schemes_autogen/mocs_compilation.cpp"
+	],
+	"UIC_UI_FILES" : [],
+	"VERBOSITY" : 0
+}

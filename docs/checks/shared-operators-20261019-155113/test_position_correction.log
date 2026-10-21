@@ -1,0 +1,6 @@
+[TemplateMatch] success=1 message=模板匹配成功,得分0.649,角度8.0°,缩放1.000 dx=22.93 dy=-20.68 angle=8.00 scale=1.000 score=0.649
+[PASS] TemplateMatch: correction reports success
+  corrected-vs-reference correlation = 0.962
+[PASS] TemplateMatch: corrected image roughly matches reference (corr > 0.5)
+
+All checks passed.

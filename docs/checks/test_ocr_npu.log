@@ -1,0 +1,14 @@
+PASS real template matches identical image
+PASS non-UUID legacy IDs cannot overwrite another operator state
+PASS template overlay maps to the translated input frame
+PASS blank target is NG
+PASS missing frame is explicit ERROR
+PASS missing reference is explicit ERROR
+{"elapsedMs":126,"error":"","logic":"AND","scheme":"test","status":"OK","timestamp":"2026-09-30T19:58:04.293Z","tools":[{"elapsedMs":126,"error":"","fields":{"confidence":0.8314615885416666,"judgements":[{"actual":"ABC123","error":"","expected":{},"field":"text","reason":"","status":"OK","type":"text_not_empty"},{"actual":6,"error":"","expected":{"maximum":32,"minimum":0},"field":"text","reason":"","status":"OK","type":"text_length"},{"actual":0.8314615885416666,"error":"","expected":{"maximum":1,"minimum":0.5},"field":"confidence","reason":"","status":"OK","type":"number_range"},{"actual":"ABC123","error":"","expected":{"caseSensitive":false,"expected":"ABC123"},"field":"text","reason":"","status":"OK","type":"text_equals"}],"polygon":[[65,70],[415,70],[415,170],[65,170]],"regions":[{"confidence":0.8314615885416666,"height":100,"polygon":[[65,70],[415,70],[415,170],[65,170]],"text":"ABC123","width":350,"x":0,"y":0}],"text":"ABC123"},"id":"22222222-2222-2222-2222-222222222222","input":{"height":100,"roi":[65,70,350,100],"source":"相机原图","width":350},"kind":"ocr","name":"OCR","status":"OK"}],"type":"scheme_result"}
+PASS NPU recognizes known text in ROI
+PASS OCR overlay includes ROI offset in the input frame
+{"elapsedMs":204,"error":"","logic":"AND","scheme":"test","status":"OK","timestamp":"2026-09-30T19:58:04.498Z","tools":[{"elapsedMs":204,"error":"","fields":{"confidence":0.8301595052083334,"judgements":[{"actual":"ABC123","error":"","expected":{},"field":"text","reason":"","status":"OK","type":"text_not_empty"},{"actual":6,"error":"","expected":{"maximum":32,"minimum":0},"field":"text","reason":"","status":"OK","type":"text_length"},{"actual":0.8301595052083334,"error":"","expected":{"maximum":1,"minimum":0.5},"field":"confidence","reason":"","status":"OK","type":"number_range"},{"actual":"ABC123","error":"","expected":{"caseSensitive":false,"expected":"ABC123"},"field":"text","reason":"","status":"OK","type":"text_equals"}],"polygon":[[0,0],[640,0],[640,240],[0,240]],"regions":[{"confidence":0.8301595052083334,"height":53,"polygon":[[97,93],[369,93],[369,146],[97,146]],"text":"ABC123","width":272,"x":97,"y":93}],"text":"ABC123"},"id":"22222222-2222-2222-2222-222222222222","input":{"height":240,"roi":[0,0,640,240],"source":"相机原图","width":640},"kind":"ocr","name":"OCR","status":"OK"}],"type":"scheme_result"}
+PASS NPU detection plus recognition on full image
+PASS upside-down text is recognized
+PASS OCR mismatch is NG
+PASS missing OCR model is ERROR

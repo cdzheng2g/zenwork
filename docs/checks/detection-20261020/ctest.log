@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /tronlong/HansAiCameraApp/build_host
+Test project /tronlong/HansAiCameraApp/build_host
+    Start 1: test_module_contracts
+1/4 Test #1: test_module_contracts ............   Passed    0.05 sec
+    Start 3: test_yolov5_decoder
+2/4 Test #3: test_yolov5_decoder ..............   Passed    0.01 sec
+    Start 4: test_detection_engine
+3/4 Test #4: test_detection_engine ............   Passed    0.13 sec
+    Start 7: test_operator_editors
+4/4 Test #7: test_operator_editors ............   Passed    0.28 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.47 sec

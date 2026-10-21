@@ -1,0 +1,38 @@
+# CMake generated Testfile for 
+# Source directory: /tronlong/HansAiCameraApp/tests
+# Build directory: /tronlong/HansAiCameraApp/build_host/tests
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(test_module_contracts "/tronlong/HansAiCameraApp/build_host/bin/test_module_contracts")
+set_tests_properties(test_module_contracts PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;9;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_image_pipeline "/tronlong/HansAiCameraApp/build_host/bin/test_image_pipeline")
+set_tests_properties(test_image_pipeline PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;10;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_yolov5_decoder "/tronlong/HansAiCameraApp/build_host/bin/test_yolov5_decoder")
+set_tests_properties(test_yolov5_decoder PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;11;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_detection_engine "/tronlong/HansAiCameraApp/build_host/bin/test_detection_engine")
+set_tests_properties(test_detection_engine PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;12;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_rknn_session "/tronlong/HansAiCameraApp/build_host/bin/test_rknn_session")
+set_tests_properties(test_rknn_session PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;19;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_inspection_service "/tronlong/HansAiCameraApp/build_host/bin/test_inspection_service")
+set_tests_properties(test_inspection_service PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;21;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_operator_editors "/tronlong/HansAiCameraApp/build_host/bin/test_operator_editors")
+set_tests_properties(test_operator_editors PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;22;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_scheme_catalog "/tronlong/HansAiCameraApp/build_host/bin/test_scheme_catalog")
+set_tests_properties(test_scheme_catalog PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;26;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_scheme_package "/tronlong/HansAiCameraApp/build_host/bin/test_scheme_package")
+set_tests_properties(test_scheme_package PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;27;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_modbus_server "/tronlong/HansAiCameraApp/build_host/bin/test_modbus_server")
+set_tests_properties(test_modbus_server PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;28;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_scheme_communication "/tronlong/HansAiCameraApp/build_host/bin/test_scheme_communication")
+set_tests_properties(test_scheme_communication PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;29;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_inspection "/tronlong/HansAiCameraApp/build_host/bin/test_inspection")
+set_tests_properties(test_inspection PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;30;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_position_correction "/tronlong/HansAiCameraApp/build_host/bin/test_position_correction")
+set_tests_properties(test_position_correction PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;34;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_camera_stream_lease "/tronlong/HansAiCameraApp/build_host/bin/test_camera_stream_lease")
+set_tests_properties(test_camera_stream_lease PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;35;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_reference_import "/tronlong/HansAiCameraApp/build_host/bin/test_reference_import")
+set_tests_properties(test_reference_import PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;36;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")
+add_test(test_file_operations "/tronlong/HansAiCameraApp/build_host/bin/test_file_operations")
+set_tests_properties(test_file_operations PROPERTIES  _BACKTRACE_TRIPLES "/tronlong/HansAiCameraApp/tests/CMakeLists.txt;7;add_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;38;hans_test;/tronlong/HansAiCameraApp/tests/CMakeLists.txt;0;")

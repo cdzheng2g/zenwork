@@ -1,0 +1,2 @@
+/usr/bin/ar qc libhans_reference.a CMakeFiles/hans_reference.dir/hans_reference_autogen/mocs_compilation.cpp.o CMakeFiles/hans_reference.dir/infrastructure/reference/ReferenceImageManager.cpp.o
+/usr/bin/ranlib libhans_reference.a

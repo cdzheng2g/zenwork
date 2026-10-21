@@ -1,0 +1,6 @@
+[PASS] loading a form preserves values and emits no user edit
+[PASS] numeric field emits a single edit without slider rounding loss
+[PASS] actual operator page preserves two OCR instances and their distinct ROIs/resources
+[PASS] disabled rule remains visibly disabled after editing
+[PASS] selection changes do not overwrite other operator parameters
+[PASS] rebuilding editor list after removal preserves remaining instance

@@ -1,0 +1,32 @@
+[PASS] export full YAML with reference and all OCR resources
+[PASS] export lightweight YAML and register shared models once
+[PASS] lightweight YAML contains hashes without embedded OCR models
+[PASS] lightweight export is smaller than full migration export
+[PASS] export contains no source-machine paths or reference IDs
+[PASS] load lightweight YAML without source-machine paths
+[PASS] new device reports missing shared OCR model clearly
+[PASS] provision identical shared resource once
+[PASS] provision identical shared resource once
+[PASS] provision identical shared resource once
+[PASS] lightweight scheme resolves preinstalled resources by checksum
+[PASS] import after source machine resources are gone
+[PASS] tools, trigger and logic survive round trip
+[PASS] numeric OCR string keeps leading zeroes
+[PASS] server/client communication parameters survive portable export/import
+[PASS] Modbus trigger and communication survive portable YAML export/import
+[PASS] reference pixels and ROI survive without loss
+[PASS] restore models into a different machine directory
+[PASS] restored resource bytes match source
+[PASS] restored resource bytes match source
+[PASS] restored resource bytes match source
+[PASS] save imported scheme transaction
+[PASS] restart loads YAML catalog
+[PASS] duplicate IDs rejected without partial catalog mutation
+[PASS] corrupt resources rejected before import
+[PASS] unknown format version rejected
+[PASS] duplicate YAML fields rejected
+[PASS] template output kept in result presentation
+[PASS] tool input dimensions visible
+[PASS] legacy JSON migrates to YAML without losing schemes
+[PASS] legacy device communication parameters migrate into the old scheme
+[PASS] migrated scheme parameters remain independent of later global INI changes

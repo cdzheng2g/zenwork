@@ -1,0 +1,10 @@
+[PASS] ROI offset is composed before the alignment transform
+[PASS] upstream alignment failure skips dependent operators
+[PASS] raw-image operators ignore a failed alignment and its transform
+[PASS] out-of-image ROI is rejected instead of silently clipped
+[PASS] registry uses the shared ROI type validator
+[PASS] letterbox inverse uses actual rounded dimensions
+[PASS] stretch inverse retains independent axis scales
+[PASS] letterbox uses declared padding
+[PASS] NMS removes weaker duplicate boxes without suppressing a different class
+[PASS] detection overlays compose box coordinates, ROI offset and alignment

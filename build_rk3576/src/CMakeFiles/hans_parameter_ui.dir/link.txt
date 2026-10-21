@@ -1,0 +1,2 @@
+/usr/bin/aarch64-linux-gnu-ar qc libhans_parameter_ui.a CMakeFiles/hans_parameter_ui.dir/hans_parameter_ui_autogen/mocs_compilation.cpp.o CMakeFiles/hans_parameter_ui.dir/ui/components/NumericParameterField.cpp.o CMakeFiles/hans_parameter_ui.dir/ui/components/ParameterForm.cpp.o CMakeFiles/hans_parameter_ui.dir/ui/components/FileParameterField.cpp.o
+/usr/bin/aarch64-linux-gnu-ranlib libhans_parameter_ui.a

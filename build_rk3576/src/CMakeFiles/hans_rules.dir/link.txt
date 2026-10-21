@@ -1,0 +1,2 @@
+/usr/bin/aarch64-linux-gnu-ar qc libhans_rules.a CMakeFiles/hans_rules.dir/hans_rules_autogen/mocs_compilation.cpp.o CMakeFiles/hans_rules.dir/modules/rules/RuleRegistry.cpp.o CMakeFiles/hans_rules.dir/modules/rules/BuiltinRules.cpp.o CMakeFiles/hans_rules.dir/app/registration/rules/RegisterRules.cpp.o
+/usr/bin/aarch64-linux-gnu-ranlib libhans_rules.a

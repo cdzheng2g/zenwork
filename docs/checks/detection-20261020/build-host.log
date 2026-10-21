@@ -1,0 +1,126 @@
+[  0%] Automatic MOC and UIC for target hans_protocols
+[  4%] Automatic MOC and UIC for target yaml-cpp
+[  4%] Automatic MOC and UIC for target hans_rules
+[  4%] Automatic MOC and UIC for target hans_inference
+[  4%] Built target hans_rules_autogen
+[  4%] Built target yaml-cpp_autogen
+[  4%] Built target hans_protocols_autogen
+[  4%] Built target hans_inference_autogen
+[  8%] Built target hans_inference
+[ 17%] Built target hans_rules
+[ 26%] Built target hans_protocols
+[ 56%] Built target yaml-cpp
+[ 56%] Automatic MOC and UIC for target hans_operators
+[ 60%] Automatic MOC and UIC for target hans_yaml
+[ 60%] Built target hans_yaml_autogen
+[ 60%] Built target hans_operators_autogen
+[ 60%] Built target hans_yaml
+[ 60%] Building CXX object src/CMakeFiles/hans_operators.dir/application/vision/detection/DetectionEngine.cpp.o
+[ 60%] Linking CXX static library libhans_operators.a
+[ 82%] Built target hans_operators
+[ 86%] Automatic MOC and UIC for target hans_schemes
+[ 86%] Automatic MOC and UIC for target hans_runtime
+[ 86%] Built target hans_schemes_autogen
+[ 86%] Built target hans_runtime_autogen
+[ 91%] Built target hans_schemes
+[ 95%] Built target hans_runtime
+[ 95%] Automatic MOC and UIC for target test_detection_engine
+[ 95%] Built target test_detection_engine_autogen
+[ 95%] Building CXX object tests/CMakeFiles/test_detection_engine.dir/test_detection_engine.cpp.o
+[100%] Linking CXX executable ../bin/test_detection_engine
+[100%] Built target test_detection_engine
+[  0%] Automatic MOC and UIC for target hans_protocols
+[  0%] Automatic MOC and UIC for target hans_inference
+[  0%] Automatic MOC and UIC for target hans_rules
+[  4%] Automatic MOC and UIC for target yaml-cpp
+[  4%] Built target hans_inference_autogen
+[  4%] Built target yaml-cpp_autogen
+[  4%] Built target hans_rules_autogen
+[  4%] Built target hans_protocols_autogen
+[ 13%] Built target hans_rules
+[ 17%] Built target hans_inference
+[ 34%] Built target hans_protocols
+[ 56%] Built target yaml-cpp
+[ 56%] Automatic MOC and UIC for target hans_operators
+[ 60%] Automatic MOC and UIC for target hans_yaml
+[ 60%] Built target hans_operators_autogen
+[ 60%] Built target hans_yaml_autogen
+[ 60%] Built target hans_yaml
+Consolidate compiler generated dependencies of target hans_operators
+[ 82%] Built target hans_operators
+[ 86%] Automatic MOC and UIC for target hans_runtime
+[ 86%] Automatic MOC and UIC for target hans_schemes
+[ 86%] Built target hans_schemes_autogen
+[ 86%] Built target hans_runtime_autogen
+[ 91%] Built target hans_schemes
+[ 95%] Built target hans_runtime
+[ 95%] Automatic MOC and UIC for target test_yolov5_decoder
+[ 95%] Built target test_yolov5_decoder_autogen
+[100%] Linking CXX executable ../bin/test_yolov5_decoder
+[100%] Built target test_yolov5_decoder
+[  0%] Automatic MOC and UIC for target hans_protocols
+[  0%] Automatic MOC and UIC for target hans_rules
+[  0%] Automatic MOC and UIC for target hans_inference
+[  4%] Automatic MOC and UIC for target yaml-cpp
+[  4%] Built target hans_inference_autogen
+[  4%] Built target hans_rules_autogen
+[  4%] Built target hans_protocols_autogen
+[  4%] Built target yaml-cpp_autogen
+[  8%] Built target hans_inference
+[ 17%] Built target hans_rules
+[ 26%] Built target hans_protocols
+[ 56%] Built target yaml-cpp
+[ 56%] Automatic MOC and UIC for target hans_operators
+[ 60%] Automatic MOC and UIC for target hans_yaml
+[ 60%] Built target hans_operators_autogen
+[ 60%] Built target hans_yaml_autogen
+[ 82%] Built target hans_operators
+[ 82%] Built target hans_yaml
+[ 82%] Automatic MOC and UIC for target hans_runtime
+[ 86%] Automatic MOC and UIC for target hans_schemes
+[ 86%] Built target hans_runtime_autogen
+[ 86%] Built target hans_schemes_autogen
+[ 91%] Built target hans_runtime
+[ 95%] Built target hans_schemes
+[ 95%] Automatic MOC and UIC for target test_module_contracts
+[ 95%] Built target test_module_contracts_autogen
+[ 95%] Linking CXX executable ../bin/test_module_contracts
+[100%] Built target test_module_contracts
+[  0%] Automatic MOC and UIC for target hans_reference
+[  0%] Automatic MOC and UIC for target hans_rules
+[  0%] Automatic MOC and UIC for target hans_inference
+[  0%] Automatic MOC and UIC for target hans_parameter_ui
+[  0%] Built target hans_inference_autogen
+[  0%] Built target hans_rules_autogen
+[  0%] Built target hans_reference_autogen
+[  0%] Built target hans_parameter_ui_autogen
+[  3%] Automatic MOC and UIC for target yaml-cpp
+[  7%] Built target hans_reference
+[  7%] Automatic MOC and UIC for target hans_protocols
+[ 10%] Built target hans_inference
+[ 10%] Built target yaml-cpp_autogen
+[ 10%] Built target hans_protocols_autogen
+[ 17%] Built target hans_rules
+[ 25%] Built target hans_parameter_ui
+[ 25%] Automatic MOC and UIC for target hans_operators
+[ 50%] Built target yaml-cpp
+[ 57%] Built target hans_protocols
+[ 57%] Built target hans_operators_autogen
+[ 60%] Automatic MOC and UIC for target hans_yaml
+[ 60%] Built target hans_yaml_autogen
+[ 78%] Built target hans_operators
+[ 78%] Automatic MOC and UIC for target hans_operator_editors
+[ 78%] Built target hans_yaml
+[ 78%] Automatic MOC and UIC for target hans_runtime
+[ 78%] Built target hans_operator_editors_autogen
+[ 82%] Automatic MOC and UIC for target hans_schemes
+[ 82%] Built target hans_runtime_autogen
+[ 82%] Built target hans_schemes_autogen
+[ 85%] Built target hans_operator_editors
+[ 89%] Built target hans_runtime
+[ 92%] Built target hans_schemes
+[ 96%] Automatic MOC and UIC for target test_operator_editors
+[ 96%] Built target test_operator_editors_autogen
+Consolidate compiler generated dependencies of target test_operator_editors
+[ 96%] Linking CXX executable ../bin/test_operator_editors
+[100%] Built target test_operator_editors
