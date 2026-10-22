@@ -13,6 +13,9 @@ class TcpServerService : public QObject {
     Q_OBJECT
 public:
     static TcpServerService& instance();
+    static constexpr int MaximumClients = 16;
+    static constexpr qint64 MaximumPendingBytes = 1024 * 1024;
+    static constexpr qint64 MaximumReadBytes = 4096;
 
     bool start(quint16 port);
     void stop();
@@ -32,6 +35,7 @@ private Q_SLOTS:
 
 private:
     explicit TcpServerService(QObject* parent = nullptr);
+    void rejectClient(QTcpSocket* client, const QString& reason);
 
     QTcpServer* _server { nullptr };
     QList<QTcpSocket*> _clients;

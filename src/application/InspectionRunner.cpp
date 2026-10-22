@@ -2,6 +2,7 @@
 #include "operators/OperatorRegistry.h"
 #include "modules/rules/RuleRegistry.h"
 #include "domain/project/LogicEvaluator.h"
+#include "infrastructure/inference/rknn/RknnSession.h"
 
 #include <QDateTime>
 #include <QElapsedTimer>
@@ -33,6 +34,7 @@ QJsonObject runInspection(const InspectionRequest& request)
     LogicExpression expression;
     expression.operation = request.settings.logicOr ? LogicOperator::Or : LogicOperator::And;
     OperatorRunContext context(request);
+    bool recoveryRequired = false;
 
     for (const auto& tool : request.tools) {
         QElapsedTimer timer;
@@ -62,6 +64,10 @@ QJsonObject runInspection(const InspectionRequest& request)
                 } else if (!passed)
                     outcome.state = NodeState::Ng;
             }
+        } catch (const RknnTimeout& error) {
+            outcome.state = NodeState::Error;
+            outcome.error = QString::fromUtf8(error.what());
+            recoveryRequired = true;
         } catch (const std::exception& error) {
             outcome.state = NodeState::Error;
             outcome.error = QString::fromUtf8(error.what());
@@ -79,6 +85,8 @@ QJsonObject runInspection(const InspectionRequest& request)
         results.append(QJsonObject { { "id", tool.id }, { "name", tool.name }, { "kind", tool.kind },
             { "status", status(outcome.state) }, { "input", outcome.input }, { "fields", outcome.fields },
             { "error", outcome.error }, { "elapsedMs", double(timer.elapsed()) } });
+        if (recoveryRequired)
+            break;
     }
 
     const auto final = LogicEvaluator::evaluate(expression, states);
@@ -86,5 +94,7 @@ QJsonObject runInspection(const InspectionRequest& request)
         { "timestamp", QDateTime::currentDateTimeUtc().toString(Qt::ISODateWithMs) },
         { "logic", request.settings.logicOr ? "OR" : "AND" }, { "status", status(final) },
         { "elapsedMs", double(total.elapsed()) }, { "tools", results },
-        { "error", request.tools.isEmpty() ? QStringLiteral("方案没有工具") : QString() } };
+        { "recoveryRequired", recoveryRequired },
+        { "error", recoveryRequired ? QStringLiteral("推理超时，检测已锁定，请重启应用恢复")
+                                    : request.tools.isEmpty() ? QStringLiteral("方案没有工具") : QString() } };
 }

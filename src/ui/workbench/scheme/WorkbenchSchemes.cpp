@@ -161,7 +161,7 @@ void WorkbenchWidget::applyTriggerSettings()
     }
     _liveMonitorWidget->setTriggerSettings(
         settings.internalTriggerEnabled, settings.triggerIntervalMs, settings.modbusTriggerEnabled);
-    if (!FileOperation::busy(this) && settings.internalTriggerEnabled && _editingSchemeName.isEmpty()
+    if (!_inspection->requiresRecovery() && !FileOperation::busy(this) && settings.internalTriggerEnabled && _editingSchemeName.isEmpty()
         && !_filePanel && !_liveMonitorWidget->isPaused())
         _internalTrigger->start(settings.triggerIntervalMs);
 }

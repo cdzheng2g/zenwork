@@ -19,6 +19,9 @@ set_target_properties(test_rknn_session PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CM
 add_test(NAME test_rknn_session COMMAND test_rknn_session)
 
 hans_test(test_inspection_service)
+hans_test(test_inspection_timeout)
+hans_test(test_tcp_limits)
+set_tests_properties(test_inspection_timeout test_tcp_limits PROPERTIES TIMEOUT 30)
 hans_test(test_operator_editors
     ${CMAKE_SOURCE_DIR}/src/ui/pages/AlgorithmConfigPage.cpp
     ${CMAKE_SOURCE_DIR}/src/ui/ImageCanvasWidget.cpp)
