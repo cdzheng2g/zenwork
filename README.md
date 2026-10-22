@@ -46,25 +46,18 @@
 
 模块在编译时注册。方案激活和触发准入可在没有 QWidget 的测试中运行。
 
-## Ubuntu 本机开发
+## 运行目标与构建环境
 
-需要 CMake、C++17 编译器、Qt（Core / Widgets / Network / Concurrent / SerialBus，同一版本）、OpenCV（core / imgproc / imgcodecs）。仓库包含所用第三方 UI 库和 yaml-cpp。
+程序部署并运行在 RK3576 板子上。云服务器用于编辑源码、交叉编译和打包。
 
-```sh
-sudo apt install build-essential cmake qtbase5-dev libqt5serialbus5-dev libopencv-dev
-cmake -S . -B build_host -DBUILD_POSITION_CORRECTION_TEST=ON
-cmake --build build_host -j2
-QT_QPA_PLATFORM=offscreen ctest --test-dir build_host --output-on-failure --timeout 45
-```
-
-本机可调试界面、方案和算法公共逻辑；没有 RKNN / AIQ / Rockit 时相关硬件能力不可用。测试中的 SDK 替身和本机网络测试不能代替板端验收。
+板端程序依赖配套的 Qt、OpenCV、RKNN、AIQ 和 Rockit MPI；交叉编译使用对应 ARM64 工具链、板端 sysroot 和 SDK。仓库包含所用第三方 UI 库和 yaml-cpp。
 
 ## RK3576 交叉编译
 
 当前云端开发环境已配置 ARM64 工具链和板端 sysroot：
 
 ```sh
-ROCKIT_MPI_SDK_DIR=/path/to/mpi/sdk JOBS=2 sh scripts/build.sh
+JOBS=2 sh scripts/build.sh
 ```
 
 脚本默认使用：
