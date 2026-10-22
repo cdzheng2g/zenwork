@@ -1,4 +1,5 @@
 #include "DetectionEngine.h"
+#include "infrastructure/inference/rknn/RknnSessionCache.h"
 #include <opencv2/imgproc.hpp>
 #include <cmath>
 #include <limits>
@@ -80,16 +81,16 @@ std::vector<DetectedObject> DetectionEngine::detect(const cv::Mat& bgr, const De
         _decoderId = options.decoderId;
         _decoderParameters = options.decoderParameters;
     }
-    _session.load(options.modelPath);
-    const auto size = modelImageSize(_session.inputs());
-    _decoder->validate(_session.outputs());
+    const auto session = cachedRknnSession(options.modelPath);
+    const auto size = modelImageSize(session->inputs());
+    _decoder->validate(session->outputs());
 
     cv::Mat colors;
     if (options.preprocess.convertToRgb) cv::cvtColor(bgr, colors, cv::COLOR_BGR2RGB);
     else colors = bgr;
     const auto prepared = resizeForModel(colors, size, options.preprocess.resizeMode, options.preprocess.padding);
     const auto input = tensorImage(prepared.image, options.preprocess);
-    const auto outputs = _session.run({{input.data, input.total() * input.elemSize(),
+    const auto outputs = session->run({{input.data, input.total() * input.elemSize(),
         options.preprocess.inputType, TensorLayout::Nhwc}});
     auto decoded = _decoder->decode(outputs, {size, options.confidenceThreshold, int(options.labels.size())});
     const QRectF bounds(0, 0, bgr.cols, bgr.rows);

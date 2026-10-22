@@ -36,13 +36,15 @@ QJsonObject runInspection(const InspectionRequest& request)
     OperatorRunContext context(request);
     bool recoveryRequired = false;
 
-    for (const auto& tool : request.tools) {
+    for (auto tool : request.tools) {
         QElapsedTimer timer;
         timer.start();
         OperatorOutcome outcome;
         outcome.input = { { "source", QStringLiteral("相机原图") }, { "width", request.image.cols },
             { "height", request.image.rows } };
         try {
+            const auto migrationError = OperatorRegistry::migrate(tool);
+            if (!migrationError.isEmpty()) throw std::runtime_error(migrationError.toStdString());
             if (request.image.empty())
                 throw std::runtime_error("没有新鲜的相机帧");
             const auto* definition = OperatorRegistry::find(tool.kind);

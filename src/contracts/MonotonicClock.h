@@ -1,0 +1,9 @@
+#pragma once
+#include <QtGlobal>
+#include <chrono>
+
+inline qint64 monotonicNowNs()
+{
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
+}

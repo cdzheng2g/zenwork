@@ -3,6 +3,7 @@
 #include "application/operators/OperatorResources.h"
 #include "application/vision/ImageTransform.h"
 #include "infrastructure/inference/rknn/RknnSession.h"
+#include "infrastructure/inference/rknn/RknnSessionCache.h"
 #include <QFile>
 #include <QJsonArray>
 #include <QStringList>
@@ -25,33 +26,34 @@ QString modelPath(const QJsonObject& config, const char* key)
     throw std::runtime_error("OCR 资源未声明");
 }
 class OcrImageModel {
-    RknnSession session;
+    std::shared_ptr<RknnSession> session;
 
 public:
     int width { 0 }, height { 0 };
     TensorInfo output;
     void load(const QString& path)
     {
-        session.load(path);
-        require(session.inputs().size() == 1 && session.outputs().size() == 1,
+        session = cachedRknnSession(path);
+        require(session->inputs().size() == 1 && session->outputs().size() == 1,
             "OCR 适配器需要单输入、单输出模型");
-        const auto& input = session.inputs().front();
+        const auto& input = session->inputs().front();
         require(input.shape.size() == 4 && input.shape[0] == 1 && input.layout != TensorLayout::Other,
             "OCR 模型需要固定尺寸的单张图像输入");
         const bool nchw = input.layout == TensorLayout::Nchw;
         height = int(input.shape[nchw ? 2 : 1]);
         width = int(input.shape[nchw ? 3 : 2]);
         require(input.shape[nchw ? 1 : 3] == 3 && width > 0 && height > 0, "OCR 模型需要三通道输入");
-        output = session.outputs().front();
+        output = session->outputs().front();
     }
     std::vector<float> infer(const cv::Mat& rgb)
     {
         require(rgb.type() == CV_8UC3 && rgb.cols == width && rgb.rows == height && rgb.isContinuous(),
             "OCR 输入格式错误");
-        auto outputs = session.run({ {rgb.data, rgb.total() * rgb.elemSize(),
+        auto outputs = session->run({ {rgb.data, rgb.total() * rgb.elemSize(),
             TensorInputType::UInt8, TensorLayout::Nhwc} });
         return std::move(outputs.front().values);
     }
+    void release() { session.reset(); }
 };
 struct OcrEngine {
     OcrImageModel rec, det;
@@ -85,6 +87,11 @@ struct OcrEngine {
     }
     QJsonObject run(const cv::Mat& bgr, const QJsonObject& config)
     {
+        struct ReleaseModels {
+            OcrImageModel& rec;
+            OcrImageModel& det;
+            ~ReleaseModels() { rec.release(); det.release(); }
+        } release {rec, det};
         rec.load(modelPath(config, "recognitionModel"));
         QFile f(modelPath(config, "dictionary"));
         require(f.open(QIODevice::ReadOnly), "无法读取 OCR 字典");

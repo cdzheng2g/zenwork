@@ -6,6 +6,10 @@
 #include <QStandardPaths>
 QString InspectionArchive::append(const QJsonObject& result)
 {
+    return appendLine(QJsonDocument(result).toJson(QJsonDocument::Compact) + '\n');
+}
+QString InspectionArchive::appendLine(const QByteArray& bytes)
+{
     const auto directory = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/results";
     if (!QDir().mkpath(directory))
         return "无法创建检测记录目录";
@@ -19,7 +23,6 @@ QString InspectionArchive::append(const QJsonObject& result)
     QFile file(path);
     if (!file.open(QIODevice::Append))
         return file.errorString();
-    const auto bytes = QJsonDocument(result).toJson(QJsonDocument::Compact) + '\n';
     if (file.write(bytes) != bytes.size() || !file.flush())
         return file.errorString();
     return { };

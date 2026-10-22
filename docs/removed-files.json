@@ -51,5 +51,6 @@
   "src/vision/detectors/yolov5/yolov5_detector.h",
   "tests/test_scheme_executor.cpp",
   "tests/test_scheme_logic.cpp",
-  "tests/test_scheme_repository.cpp"
+  "tests/test_scheme_repository.cpp",
+  "src/alg_task/ppocr_det.cc"
 ]

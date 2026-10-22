@@ -1,2 +1,0 @@
-/usr/bin/ar qc libhans_runtime.a CMakeFiles/hans_runtime.dir/hans_runtime_autogen/mocs_compilation.cpp.o CMakeFiles/hans_runtime.dir/application/inspection/InspectionService.cpp.o CMakeFiles/hans_runtime.dir/application/InternalTrigger.cpp.o CMakeFiles/hans_runtime.dir/application/communication/SchemeCommunicationRuntime.cpp.o CMakeFiles/hans_runtime.dir/infrastructure/persistence/InspectionArchive.cpp.o
-/usr/bin/ranlib libhans_runtime.a

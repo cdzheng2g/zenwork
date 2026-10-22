@@ -2,6 +2,8 @@
 #include "infrastructure/communication/ModbusTcpServerService.h"
 #include "infrastructure/communication/ModbusTcpOutputService.h"
 #include "infrastructure/communication/TcpServerService.h"
+#include "application/communication/ResultOutputDispatcher.h"
+#include "application/communication/ResultDeliveryTracker.h"
 #include <QCoreApplication>
 #include <QElapsedTimer>
 #include <QModbusTcpServer>
@@ -97,6 +99,15 @@ int main(int argc, char** argv)
         return sequence == 23;
     }),
         "automatic client connection publishes inspection data");
+    const QString fullSequence = "9007199254740993";
+    const auto deliveryErrors = ResultOutputDispatcher::publish({"modbus_tcp_client"},
+        {{"inspectionId", "protocol-ack-test"}, {"sequenceText", fullSequence},
+            {"sequence", 24}, {"status", "OK"}});
+    auto& tracker = ResultDeliveryTracker::instance();
+    check(deliveryErrors.isEmpty() && waitFor([&] {
+        return tracker.latest("protocol-ack-test", "modbus_tcp_client").state == DeliveryState::Confirmed;
+    }) && tracker.latest("protocol-ack-test", "modbus_tcp_client").sequenceText == fullSequence,
+        "real local Modbus reply confirms its originating UUID and full precision sequence");
     runtime.stopAll();
     check(waitFor([&] { return !client.isConnected(); }) && !modbus.isRunning() && !tcp.isRunning(),
         "removing the last scheme stops its services");

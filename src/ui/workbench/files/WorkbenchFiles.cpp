@@ -105,8 +105,6 @@ void WorkbenchWidget::importSchemeFile(const QString& path, std::function<void(c
             }
             if (!package->reference.image.empty())
                 ReferenceImageManager::instance().adoptPreparedReference(package->reference);
-            _inspection->invalidate();
-            applyCurrentSchemeCamera();
             refreshSchemeControl();
             _statusLabel->setText(QStringLiteral("已导入方案：%1").arg(package->name));
             finished(QString());
@@ -119,8 +117,7 @@ void WorkbenchWidget::showSchemeFilePanel(bool exporting)
         return;
     if (exporting && _schemeCatalog.currentSchemeName().isEmpty())
         return;
-    _inspection->invalidate();
-    _internalTrigger->stop();
+    _coordinator->setFileBusy(true);
 
     auto* panel = _filePanel = new QFrame(this);
     panel->setObjectName("configPanel");

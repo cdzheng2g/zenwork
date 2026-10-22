@@ -1,0 +1,10 @@
+# Build outputs are local to each machine. Keep bundled third_party libraries tracked.
+/build/
+/build_*/
+/cmake-build-*/
+/dist/
+/out/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+.DS_Store

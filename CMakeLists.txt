@@ -18,6 +18,9 @@ list(APPEND CMAKE_PREFIX_PATH ${QT_SDK_DIR})
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Concurrent SerialBus)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Concurrent SerialBus)
+if (QT_VERSION_MAJOR EQUAL 6)
+    find_package(Qt6 REQUIRED COMPONENTS GuiPrivate WidgetsPrivate)
+endif ()
 
 foreach (_qt_module Widgets Network Concurrent SerialBus)
     if (NOT "${Qt${QT_VERSION_MAJOR}${_qt_module}_VERSION}" VERSION_EQUAL "${Qt${QT_VERSION_MAJOR}Core_VERSION}")
@@ -42,7 +45,7 @@ endif ()
 # 通过CMAKE_FIND_ROOT_PATH/CMAKE_SYSROOT即可复用,不需要额外交叉编译OpenCV源码。
 find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs)
 
-if (NOT WIN32)
+if (UNIX AND NOT APPLE)
     add_link_options(-Wl,--disable-new-dtags)
 endif ()
 

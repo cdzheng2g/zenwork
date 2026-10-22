@@ -1,10 +1,6 @@
 #include "ui/workbench/WorkbenchWidget.h"
 #include "ui/workbench/LiveMonitorWidget.h"
 #include "ui/pages/CommunicationSettingsPage.h"
-#include "application/InternalTrigger.h"
-#include "infrastructure/camera/CameraStreamService.h"
-#include "infrastructure/camera/CameraController.h"
-#include "infrastructure/communication/ModbusTcpServerService.h"
 #include "application/communication/SchemeCommunicationRuntime.h"
 #include <QTimer>
 
@@ -12,6 +8,7 @@
 #include <QAbstractButton>
 #include <QDateTime>
 #include "app/CreateInspectionService.h"
+#include "app/CreateInspectionCoordinator.h"
 #include <QLabel>
 #include <QStackedWidget>
 #include <QVBoxLayout>
@@ -20,6 +17,7 @@ WorkbenchWidget::WorkbenchWidget(QWidget* parent)
     : QWidget(parent)
 {
     _inspection = createInspectionService(this);
+    _coordinator = createInspectionCoordinator(*_inspection, this);
     setObjectName("workbenchRoot");
     setStyleSheet(panelStyle());
 
@@ -50,40 +48,36 @@ WorkbenchWidget::WorkbenchWidget(QWidget* parent)
     _topGroup->button(0)->setChecked(true);
     _topStack->setCurrentIndex(0);
     // 页面切换期间保持采集链路，避免反复初始化媒体资源。
-    CameraStreamService::instance().retainForApplicationLifetime();
-    _internalTrigger = new InternalTrigger(this);
     connect(_inspection, &InspectionService::finished, this, &WorkbenchWidget::completeInspection);
     connect(_inspection, &InspectionService::faulted, this, [this](const QString& reason) {
-        _internalTrigger->stop();
-        refreshModbusState();
         _statusLabel->setText(reason);
     });
-    connect(_internalTrigger, &InternalTrigger::triggered, this, [this] { executeInspection(); });
+    connect(_inspection, &InspectionService::deliveryUpdated, this, [this](const DeliveryEvent& event) {
+        if (event.state == DeliveryState::Failed || event.state == DeliveryState::TimedOut)
+            _statusLabel->setText(QStringLiteral("检测 %1 的 %2 输出失败：%3")
+                .arg(event.sequenceText, event.channel, event.error));
+    });
+    connect(_coordinator, &InspectionCoordinator::submission, this, [this](TriggerDecision decision) {
+        _statusLabel->setText(_inspection->requiresRecovery() ? _inspection->recoveryReason()
+            : decision == TriggerDecision::Accepted ? QStringLiteral("正在检测：") + _schemeCatalog.currentSchemeName()
+            : decision == TriggerDecision::Busy ? QStringLiteral("正在检测，请稍后重试")
+            : QStringLiteral("未就绪，请检查方案、编辑状态和相机画面"));
+    });
     connect(_liveMonitorWidget, &LiveMonitorWidget::runOnceRequested, this, [this] {
-        if (_internalTrigger->tryBeginExecution())
-            executeInspection(TriggerSource::Manual);
+        executeInspection(TriggerSource::Manual);
     });
     connect(_liveMonitorWidget, &LiveMonitorWidget::runToolRequested, this, [this](const QString& id) {
         if (_inspection->isRunning()) {
             _statusLabel->setText(QStringLiteral("上一轮检测尚未结束，请稍后测试"));
             return;
         }
-        if (_internalTrigger->tryBeginExecution())
-            executeInspection(TriggerSource::Manual, id);
+        executeInspection(TriggerSource::Manual, id);
     });
     connect(_liveMonitorWidget, &LiveMonitorWidget::pausedChanged, this, [this](bool paused) {
-        _inspection->invalidate();
-        applyTriggerSettings();
+        _coordinator->setPaused(paused);
         _statusLabel->setText(_inspection->requiresRecovery() ? _inspection->recoveryReason()
             : paused ? QStringLiteral("检测已暂停") : QStringLiteral("检测已恢复"));
     });
-    connect(&CameraStreamService::instance(), &CameraStreamService::frameReady, this,
-        [this](const cv::Mat& frame) { _inspection->updateFrame(frame); });
-    connect(&ModbusTcpServerService::instance(), &ModbusTcpServerService::triggerRequested, this,
-        &WorkbenchWidget::handleModbusTrigger);
-    auto* modbusStateTimer = new QTimer(this);
-    connect(modbusStateTimer, &QTimer::timeout, this, &WorkbenchWidget::refreshModbusState);
-    modbusStateTimer->start(200);
     connect(
         &SchemeCommunicationRuntime::instance(), &SchemeCommunicationRuntime::statusChanged, this, [this] {
             const QString summary = SchemeCommunicationRuntime::instance().summary();
@@ -94,7 +88,6 @@ WorkbenchWidget::WorkbenchWidget(QWidget* parent)
     if (!_schemeCatalog.load(&catalogError))
         _statusLabel->setText(QStringLiteral("方案目录读取失败：%1").arg(catalogError));
     refreshSchemeControl();
-    applyCurrentSchemeCamera();
     applyTriggerSettings();
 }
 
@@ -136,6 +129,5 @@ void WorkbenchWidget::refreshSchemeControl()
 
 WorkbenchWidget::~WorkbenchWidget()
 {
-    _internalTrigger->stop();
-    _inspection->waitForFinished();
+    _coordinator->shutdown();
 }

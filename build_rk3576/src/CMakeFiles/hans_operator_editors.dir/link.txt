@@ -1,2 +1,0 @@
-/usr/bin/aarch64-linux-gnu-ar qc libhans_operator_editors.a CMakeFiles/hans_operator_editors.dir/hans_operator_editors_autogen/mocs_compilation.cpp.o CMakeFiles/hans_operator_editors.dir/app/registration/ui/RegisterOperatorEditors.cpp.o CMakeFiles/hans_operator_editors.dir/ui/operators/RuleSetEditor.cpp.o CMakeFiles/hans_operator_editors.dir/ui/operators/ImageOperatorEditor.cpp.o
-/usr/bin/aarch64-linux-gnu-ranlib libhans_operator_editors.a

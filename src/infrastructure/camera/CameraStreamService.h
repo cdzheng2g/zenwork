@@ -11,6 +11,7 @@
 
 class CameraStreamWorker;
 class QTimer;
+class CameraRecovery;
 
 // 进程内唯一的采集服务。页面通过租约共享板端 VI->VPSS 帧流。
 class CameraStreamService : public QObject {
@@ -25,9 +26,12 @@ public:
     void retainForApplicationLifetime();
     // 在停止AIQ前同步结束取帧线程，避免释放媒体资源时仍有VPSS取帧请求。
     void shutdown();
+    void retry();
 
 Q_SIGNALS:
     void frameReady(const cv::Mat& frame);
+    void frameAvailable(const FrameEnvelope& frame);
+    void cameraStateChanged(bool ready);
     void streamError(const QString& message);
 
 private Q_SLOTS:
@@ -40,6 +44,8 @@ private:
     CameraStreamLease _lease;
     CameraStreamWorker* _worker { nullptr };
     QTimer* _stopTimer { nullptr };
+    CameraRecovery* _recovery { nullptr };
+    QString _lastError;
     bool _applicationLeaseHeld { false };
 };
 

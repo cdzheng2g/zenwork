@@ -9,6 +9,5 @@ bool TcpResultPublisher::publish(const QJsonObject& result, QString* error) cons
             *error = QStringLiteral("TCP Server 未启动");
         return false;
     }
-    server.broadcastJson(result);
-    return true;
+    return server.broadcastJson(result, error);
 }

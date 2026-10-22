@@ -7,6 +7,7 @@
 #include <QString>
 
 #include <atomic>
+#include "contracts/FrameEnvelope.h"
 
 // 后台取帧线程。RK3576 板端从 VI->VPSS 读取；非 Rockit 构建保留
 // V4L2 开发机回退路径。帧交给 CameraStreamService 限流后投递到 UI。
@@ -29,7 +30,7 @@ public:
 
 Q_SIGNALS:
     // 成功取到一帧(BGR 格式 cv::Mat)。
-    void frameReady(const cv::Mat& frame);
+    void frameReady(const FrameEnvelope& frame);
     // 打开设备失败或取流中断,message为可读的原因,供UI提示。
     void streamError(const QString& message);
 
@@ -42,6 +43,7 @@ private:
     int _height { 0 };
     std::atomic<bool> _running { false };
     std::atomic<int> _wakeFd { -1 };
+    quint64 _frameSequence {0};
 };
 
 #endif // CAMERASTREAMWORKER_H

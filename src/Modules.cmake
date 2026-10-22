@@ -47,6 +47,7 @@ add_library(hans_protocols STATIC
     infrastructure/communication/ModbusTcpServerService.cpp
     infrastructure/communication/TcpResultPublisher.cpp
     application/communication/ResultOutputDispatcher.cpp
+    application/communication/ResultDeliveryTracker.cpp
     app/registration/communication/RegisterCommunication.cpp
     modules/communication/tcp/TcpModule.cpp
     modules/communication/modbus/ModbusClientModule.cpp
@@ -63,9 +64,14 @@ target_link_libraries(hans_schemes PUBLIC hans_contracts)
 
 add_library(hans_runtime STATIC
     application/inspection/InspectionService.cpp
+    application/inspection/InspectionCoordinator.cpp
+    application/scheme/SchemeActivationService.cpp
+    infrastructure/inference/InspectionProcess.cpp
+    infrastructure/camera/CameraRecovery.cpp
     application/InternalTrigger.cpp
     application/communication/SchemeCommunicationRuntime.cpp
     infrastructure/persistence/InspectionArchive.cpp
+    infrastructure/persistence/ArchiveQueue.cpp
 )
 target_link_libraries(hans_runtime PUBLIC hans_contracts)
 
@@ -89,6 +95,6 @@ target_link_libraries(hans_operator_editors PUBLIC hans_contracts)
 target_link_libraries(hans_operators PUBLIC hans_rules hans_inference ${OpenCV_LIBS})
 target_link_libraries(hans_protocols PUBLIC Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialBus)
 target_link_libraries(hans_schemes PUBLIC hans_yaml hans_operators hans_protocols)
-target_link_libraries(hans_runtime PUBLIC hans_operators hans_protocols Qt${QT_VERSION_MAJOR}::Concurrent)
+target_link_libraries(hans_runtime PUBLIC hans_operators hans_protocols hans_schemes Qt${QT_VERSION_MAJOR}::Concurrent)
 target_link_libraries(hans_parameter_ui PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(hans_operator_editors PUBLIC hans_parameter_ui hans_operators hans_reference)

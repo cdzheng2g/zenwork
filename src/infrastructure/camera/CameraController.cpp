@@ -1,4 +1,5 @@
 #include "infrastructure/camera/CameraController.h"
+#include "contracts/FrameEnvelope.h"
 
 #include <QDebug>
 
@@ -478,7 +479,7 @@ bool CameraController::startQtFrameStream(int width, int height)
 #endif
 }
 
-bool CameraController::readQtPreviewFrame(cv::Mat& frame, int timeoutMs)
+bool CameraController::readQtPreviewFrame(cv::Mat& frame, int timeoutMs, qint64* acquiredAtNs)
 {
     frame.release();
 
@@ -491,6 +492,7 @@ bool CameraController::readQtPreviewFrame(cv::Mat& frame, int timeoutMs)
     const int result = RK_MPI_VPSS_GetChnFrame(kVpssGrpId, kVpssChnDisp, &nativeFrame, timeoutMs);
     if (result != RK_SUCCESS)
         return false;
+    if (acquiredAtNs) *acquiredAtNs = monotonicNowNs();
 
     struct FrameRelease {
         VIDEO_FRAME_INFO_S* frame;
@@ -527,6 +529,7 @@ bool CameraController::readQtPreviewFrame(cv::Mat& frame, int timeoutMs)
     return !frame.empty();
 #else
     Q_UNUSED(timeoutMs)
+    Q_UNUSED(acquiredAtNs)
     return false;
 #endif
 }

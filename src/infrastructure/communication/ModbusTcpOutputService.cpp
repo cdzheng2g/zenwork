@@ -64,7 +64,8 @@ void ModTcpOutputService::onClientError()
     emit errorOccurred(_client->errorString());
 }
 
-bool ModTcpOutputService::publish(quint16 verdict, quint16 sequence, QString* error)
+bool ModTcpOutputService::publish(quint16 verdict, quint16 sequence, QString* error,
+    const QString& inspectionId, const QString& sequenceText)
 {
     if (error)
         error->clear();
@@ -97,10 +98,15 @@ bool ModTcpOutputService::publish(quint16 verdict, quint16 sequence, QString* er
         }
 
         emit writeFinished(success, message);
+        emit deliveryFinished({inspectionId, sequenceText, "modbus_tcp_client",
+            success ? DeliveryState::Confirmed : reply->error() == QModbusDevice::TimeoutError
+                ? DeliveryState::TimedOut : DeliveryState::Failed, message});
         reply->deleteLater();
         return success;
     }
 
+    reply->setProperty("inspectionId", inspectionId);
+    reply->setProperty("sequenceText", sequenceText);
     connect(reply, &QModbusReply::finished, this, &ModTcpOutputService::onWriteFinished);
 
     return true;
@@ -119,5 +125,9 @@ void ModTcpOutputService::onWriteFinished()
         emit errorOccurred(message);
 
     emit writeFinished(success, message);
+    emit deliveryFinished({reply->property("inspectionId").toString(),
+        reply->property("sequenceText").toString(), "modbus_tcp_client",
+        success ? DeliveryState::Confirmed : reply->error() == QModbusDevice::TimeoutError
+            ? DeliveryState::TimedOut : DeliveryState::Failed, message});
     reply->deleteLater();
 }
