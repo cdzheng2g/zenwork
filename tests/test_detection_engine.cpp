@@ -80,11 +80,14 @@ std::vector<TensorOutput> RknnSession::run(const std::vector<TensorInput>& input
     const std::size_t bytes = input.type == TensorInputType::UInt8 ? 1
         : input.type == TensorInputType::Float16 ? 2 : 4;
     if (input.bytes != 64 * 64 * 3 * bytes) throw std::runtime_error("wrong input bytes");
+    cv::Mat decodedHalf;
+    if (input.type == TensorInputType::Float16)
+        cv::Mat(1, 64 * 64 * 3, CV_16F, const_cast<void*>(input.data)).convertTo(decodedHalf, CV_32F);
     for (int channel = 0; channel < 3; ++channel) {
         submittedPixel[channel] = input.type == TensorInputType::UInt8
             ? static_cast<const unsigned char*>(input.data)[index + channel]
             : input.type == TensorInputType::Float16
-                ? float(static_cast<const cv::float16_t*>(input.data)[index + channel])
+                ? decodedHalf.ptr<float>()[index + channel]
                 : static_cast<const float*>(input.data)[index + channel];
     }
     ++executions;

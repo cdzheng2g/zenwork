@@ -59,25 +59,34 @@ int TcpServerService::clientCount() const
     return _clients.size();
 }
 
-void TcpServerService::broadcastJson(const QJsonObject& object)
+bool TcpServerService::broadcastJson(const QJsonObject& object, QString* error)
 {
+    if (error) error->clear();
     const QByteArray payload = QJsonDocument(object).toJson(QJsonDocument::Compact) + '\n';
     if (payload.size() > MaximumPendingBytes) {
         Q_EMIT errorOccurred(QStringLiteral("TCP 结果超过单条发送上限，未发送"));
-        return;
+        if (error) *error = QStringLiteral("TCP 结果超过单条发送上限");
+        return false;
     }
     // abort() may synchronously remove a client through disconnected().
     const auto clients = _clients;
+    bool sent = false, failed = false;
     for (QTcpSocket* client : clients) {
         if (client->state() != QAbstractSocket::ConnectedState)
             continue;
         if (client->bytesToWrite() > MaximumPendingBytes - payload.size()) {
             rejectClient(client, QStringLiteral("TCP 客户端发送积压超过上限，已断开"));
+            failed = true;
             continue;
         }
-        if (client->write(payload) != payload.size())
+        if (client->write(payload) != payload.size()) {
+            failed = true;
             rejectClient(client, QStringLiteral("TCP 结果提交不完整，已断开客户端"));
+        } else sent = true;
     }
+    if ((!sent || failed) && error) *error = failed
+        ? QStringLiteral("部分或全部 TCP 客户端未能提交结果") : QStringLiteral("没有可接收结果的 TCP 客户端");
+    return sent && !failed;
 }
 
 void TcpServerService::rejectClient(QTcpSocket* client, const QString& reason)

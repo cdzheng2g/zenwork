@@ -8,7 +8,6 @@ set(PROJECT_SOURCES
     application/scheme/CommunicationSettings.h
     infrastructure/communication/LegacyCommunicationSettings.h
     infrastructure/communication/ModbusRegisterMap.h
-    ui/workbench/inspection/WorkbenchModbus.cpp
     ui/LoginWindow.h
     ui/LoginWindow.cpp
     ui/ImageCanvasWidget.h
@@ -55,6 +54,7 @@ set(PROJECT_SOURCES
     infrastructure/input/ImageSequenceSource.cpp
     contracts/ReferenceImage.h
     app/CreateInspectionService.cpp
+    app/CreateInspectionCoordinator.cpp
 )
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/Modules.cmake)

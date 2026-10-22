@@ -4,6 +4,8 @@
 #include "contracts/ReferenceImage.h"
 #include "infrastructure/camera/CameraController.h"
 #include "infrastructure/camera/CameraStreamService.h"
+#include "infrastructure/inference/InspectionProcess.h"
+#include <cstring>
 
 #include <opencv2/core.hpp>
 
@@ -12,12 +14,15 @@
 
 int main(int argc, char* argv[])
 {
+    if (argc > 1 && std::strcmp(argv[1], "--inspection-worker") == 0)
+        return inspectionWorkerMain(argc, argv);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
     // Camera frames cross the queued connection from the capture thread.
     qRegisterMetaType<cv::Mat>("cv::Mat");
+    qRegisterMetaType<FrameEnvelope>("FrameEnvelope");
     // 无桌面环境(eglfs/linuxfb)下没有系统级输入法/虚拟键盘,
     // 接入第三方 QWidget 虚拟键盘插件(third_party/QVirtualKeyboard)
     qputenv("QT_IM_MODULE", QByteArray("Qt5Input"));

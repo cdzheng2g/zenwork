@@ -1,2 +1,0 @@
-/usr/bin/ar qc libhans_inference.a CMakeFiles/hans_inference.dir/hans_inference_autogen/mocs_compilation.cpp.o CMakeFiles/hans_inference.dir/infrastructure/inference/rknn/RknnSession.cpp.o
-/usr/bin/ranlib libhans_inference.a

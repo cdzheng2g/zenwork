@@ -210,6 +210,9 @@ void CameraSettingsPage::initContent()
     previewHeader->addWidget(previewTitle);
     previewHeader->addStretch(1);
     previewHeader->addWidget(_previewStatus);
+    auto* retryCamera = new QPushButton(QStringLiteral("重新连接"), previewCard);
+    connect(retryCamera, &QPushButton::clicked, this, [] { CameraStreamService::instance().retry(); });
+    previewHeader->addWidget(retryCamera);
     previewLayout->addLayout(previewHeader);
     _previewCanvas = new ImageCanvasWidget(previewCard);
     _previewCanvas->setMinimumSize(320, 240);

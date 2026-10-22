@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include <QList>
 #include <QStringList>
+#include <QMap>
 #include <cmath>
 
 enum class ParameterKind { Number, Boolean, Text, Choice, File };
@@ -17,6 +18,7 @@ struct ParameterSpec {
     bool slider { false };
     QString fileFilter;
     bool advanced { false };
+    QMap<QString, QString> choiceLabels;
 };
 using ParameterSchema = QList<ParameterSpec>;
 inline ParameterSpec numberParameter(QString key, QString label, double value, double low, double high,
@@ -32,11 +34,13 @@ inline ParameterSpec textParameter(QString key, QString label, QString value = {
 {
     return { key, label, ParameterKind::Text, value };
 }
-inline ParameterSpec choiceParameter(QString key, QString label, QString value, QStringList choices)
+inline ParameterSpec choiceParameter(QString key, QString label, QString value, QStringList choices,
+    QMap<QString, QString> labels = {})
 {
     auto spec = textParameter(key, label, value);
     spec.kind = ParameterKind::Choice;
     spec.choices = choices;
+    spec.choiceLabels = std::move(labels);
     return spec;
 }
 inline ParameterSpec fileParameter(QString key, QString label, QString value = {},

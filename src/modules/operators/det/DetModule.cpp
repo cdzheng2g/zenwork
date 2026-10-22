@@ -69,7 +69,7 @@ void execute(OperatorRunContext& context, const QJsonObject& parameters, Operato
     options.decoderParameters = DetectionDecoderRegistry::configuration(options.decoderId, parameters);
     options.confidenceThreshold = parameters["confidenceThreshold"].toDouble();
     options.nmsThreshold = parameters["nmsThreshold"].toDouble();
-    options.preprocess.resizeMode = parameters["resizeMode"].toString() == "等比例填充"
+    options.preprocess.resizeMode = parameters["resizeMode"].toString() == "letterbox"
         ? ImageResizeMode::Letterbox : ImageResizeMode::Stretch;
     options.preprocess.convertToRgb = parameters["convertToRgb"].toBool();
 
@@ -110,6 +110,15 @@ OperatorDefinition detectionDefinition()
 {
     OperatorDefinition d;
     d.kind = "detection";
+    d.currentVersion = 2;
+    d.migrate = [](SchemeTool& tool) {
+        const auto mode = tool.parameters.value("resizeMode").toString(QStringLiteral("等比例填充"));
+        if (mode == "等比例填充" || mode == "letterbox") tool.parameters["resizeMode"] = "letterbox";
+        else if (mode == "拉伸" || mode == "stretch") tool.parameters["resizeMode"] = "stretch";
+        else return QStringLiteral("旧检测算子缩放方式无效");
+        tool.version = 2;
+        return QString();
+    };
     d.name = "目标检测";
     d.symbol = "检";
     d.imageInput = inputSpec();
@@ -121,7 +130,8 @@ OperatorDefinition detectionDefinition()
         fileParameter("labelsPath", "类别标签", {}, "类别标签 (*.txt)", false),
         numberParameter("confidenceThreshold", "置信度阈值", .5, 0, 1, 2, .01),
         numberParameter("nmsThreshold", "重叠抑制阈值", .45, 0, 1, 2, .01),
-        choiceParameter("resizeMode", "图像缩放", "等比例填充", {"等比例填充", "拉伸"}),
+        choiceParameter("resizeMode", "图像缩放", "letterbox", {"letterbox", "stretch"},
+            {{"letterbox", "等比例填充"}, {"stretch", "拉伸"}}),
         boolParameter("convertToRgb", "输入转换为 RGB", true)
     };
     d.parameters.append(DetectionDecoderRegistry::configurationSchema());

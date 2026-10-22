@@ -1,5 +1,0 @@
-test_module_contracts 1 0.025607
-test_yolov5_decoder 1 0.0038493
-test_detection_engine 1 0.0710878
-test_operator_editors 1 0.136327
----

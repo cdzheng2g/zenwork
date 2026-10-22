@@ -6,7 +6,7 @@
 #include "ui/pages/ReferenceManagePage.h"
 #include "ui/pages/CommunicationSettingsPage.h"
 #include "application/communication/SchemeCommunicationRuntime.h"
-#include "application/InternalTrigger.h"
+#include "app/CreateInspectionCoordinator.h"
 #include "application/scheme/SchemePackage.h"
 #include "infrastructure/camera/CameraController.h"
 #include "infrastructure/camera/CameraParamsJson.h"
@@ -44,8 +44,6 @@ void WorkbenchWidget::editCurrentScheme()
 void WorkbenchWidget::selectScheme(const QString& schemeName)
 {
     if (_schemeCatalog.select(schemeName)) {
-        _inspection->invalidate();
-        applyCurrentSchemeCamera();
         applyTriggerSettings();
         refreshSchemeControl();
     }
@@ -53,8 +51,7 @@ void WorkbenchWidget::selectScheme(const QString& schemeName)
 
 void WorkbenchWidget::beginEditingScheme(const QString& schemeName, const SchemeRuntimeSettings& settings)
 {
-    _inspection->invalidate();
-    _internalTrigger->stop();
+    _coordinator->setEditing(true);
     _editingSchemeName = schemeName;
     _editingSettings = settings;
     if (!settings.camera.isEmpty())
@@ -69,7 +66,6 @@ void WorkbenchWidget::beginEditingScheme(const QString& schemeName, const Scheme
     _triggerMode->setCurrentIndex(settings.modbusTriggerEnabled ? 1
             : settings.internalTriggerEnabled                   ? 0
                                                                 : 2);
-    refreshModbusState();
     _communicationSettingsPage->setSettings(settings);
     _triggerIntervalMs->setEnabled(settings.internalTriggerEnabled);
     _triggerIntervalMs->setValue(settings.triggerIntervalMs);
@@ -109,7 +105,8 @@ void WorkbenchWidget::saveEditingScheme()
         package.reference = *ref;
 
     const QString path = _schemeCatalog.portablePath(package.name);
-    FileOperation::run(
+    _coordinator->setFileBusy(true);
+    const bool submitted = FileOperation::run(
         this, QStringLiteral("正在保存方案和资源"),
         [package, path] {
             QString error;
@@ -117,6 +114,7 @@ void WorkbenchWidget::saveEditingScheme()
             return error;
         },
         [this, package, path](const QString& failure) {
+            _coordinator->setFileBusy(false);
             QString error = failure;
             if (!error.isEmpty()
                 || !_schemeCatalog.saveComplete(package.name, package.settings, package.tools, &error)) {
@@ -126,11 +124,14 @@ void WorkbenchWidget::saveEditingScheme()
             _statusLabel->setText(QStringLiteral("已保存 YAML：%1").arg(path));
             _statusLabel->setToolTip(path);
             _editingSchemeName.clear();
-            _inspection->invalidate();
             applyTriggerSettings();
             refreshSchemeControl();
             _topStack->setCurrentIndex(0);
         });
+    if (!submitted) {
+        _coordinator->setFileBusy(false);
+        _statusLabel->setText(QStringLiteral("已有文件操作正在进行，请稍后保存"));
+    }
 }
 
 void WorkbenchWidget::cancelEditingScheme()
@@ -143,27 +144,17 @@ void WorkbenchWidget::cancelEditingScheme()
 
 void WorkbenchWidget::applyTriggerSettings()
 {
-    _inspection->invalidate();
-    _internalTrigger->stop();
-    const QString current = _schemeCatalog.currentSchemeName();
-    refreshModbusState();
-    if (current.isEmpty()) {
-        _communicationReady = false;
-        SchemeCommunicationRuntime::instance().stopAll();
-        return;
-    }
-    const SchemeRuntimeSettings settings = _schemeCatalog.settings(current);
-    if (_editingSchemeName.isEmpty() && !_filePanel && !FileOperation::busy(this)) {
-        QString communicationError;
-        _communicationReady = SchemeCommunicationRuntime::instance().apply(settings, &communicationError);
-        if (!communicationError.isEmpty())
-            _statusLabel->setText(QStringLiteral("通信配置未生效：") + communicationError);
-    }
+    _coordinator->setMode({!_editingSchemeName.isEmpty(), _filePanel != nullptr, _liveMonitorWidget->isPaused()});
+    if (!_editingSchemeName.isEmpty() || _filePanel) return;
+    QString error;
+    if (!activateCatalogScheme(*_coordinator, _schemeCatalog, &error))
+        _statusLabel->setText(error);
+    const auto current = _schemeCatalog.currentSchemeName();
+    const auto settings = _schemeCatalog.settings(current);
+    if (!settings.camera.isEmpty())
+        _cameraSettingsPage->loadParamsIntoUi(cameraParamsFromJson(settings.camera));
     _liveMonitorWidget->setTriggerSettings(
         settings.internalTriggerEnabled, settings.triggerIntervalMs, settings.modbusTriggerEnabled);
-    if (!_inspection->requiresRecovery() && !FileOperation::busy(this) && settings.internalTriggerEnabled && _editingSchemeName.isEmpty()
-        && !_filePanel && !_liveMonitorWidget->isPaused())
-        _internalTrigger->start(settings.triggerIntervalMs);
 }
 
 void WorkbenchWidget::refreshLogicPreview()
@@ -199,15 +190,4 @@ void WorkbenchWidget::deleteCurrentScheme()
     applyTriggerSettings();
     refreshSchemeControl();
     _statusLabel->setText(QStringLiteral("方案已删除"));
-}
-
-void WorkbenchWidget::applyCurrentSchemeCamera()
-{
-    const auto camera = _schemeCatalog.settings(_schemeCatalog.currentSchemeName()).camera;
-    if (camera.isEmpty())
-        return;
-    const auto params = cameraParamsFromJson(camera);
-    _cameraSettingsPage->loadParamsIntoUi(params);
-    if (!CameraController::instance().applyParams(params))
-        _statusLabel->setText(QStringLiteral("方案相机参数未完全应用，请检查相机设置"));
 }

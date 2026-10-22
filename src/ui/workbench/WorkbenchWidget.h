@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <functional>
 #include "application/inspection/InspectionService.h"
+#include "application/inspection/InspectionCoordinator.h"
 #include <QJsonObject>
 #include <QMap>
 #include <opencv2/core.hpp>
@@ -48,7 +49,6 @@ private:
     void importSchemeFile(const QString& path, std::function<void(const QString&)> finished);
     void exportSchemeFile(
         const QString& path, bool includeModels, std::function<void(const QString&)> finished);
-    void applyCurrentSchemeCamera();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -70,11 +70,7 @@ private:
     void applyTriggerSettings();
     void refreshLogicPreview();
     bool executeInspection(TriggerSource source = TriggerSource::Internal, const QString& toolId = { });
-    InspectionGate inspectionGate() const;
     void completeInspection();
-    void handleModbusTrigger();
-    bool modbusTriggerReady() const;
-    void refreshModbusState();
     InspectionService* _inspection { nullptr };
     QComboBox* _logicRule { nullptr };
 
@@ -85,7 +81,6 @@ private:
     QLabel* _statusLabel { nullptr };
     QLabel* _planLabel { nullptr };
     QLabel* _communicationStatus { nullptr };
-    bool _communicationReady { false };
     QLabel* _workflowTitle { nullptr };
     QLabel* _logicPreview { nullptr };
     QLineEdit* _schemeNameEdit { nullptr };
@@ -101,7 +96,7 @@ private:
     SchemeRuntimeSettings _editingSettings;
     QString _editingSchemeName;
     QList<SchemeTool> _editingTools;
-    InternalTrigger* _internalTrigger { nullptr };
+    InspectionCoordinator* _coordinator { nullptr };
 };
 
 #endif // WORKBENCHWIDGET_H

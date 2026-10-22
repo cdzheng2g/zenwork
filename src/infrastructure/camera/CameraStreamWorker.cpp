@@ -183,9 +183,10 @@ void CameraStreamWorker::run()
     int vpssConsecutiveFailures = 0;
     while (_running.load()) {
         cv::Mat frame;
-        if (camera.readQtPreviewFrame(frame, 500)) {
+        qint64 acquiredAtNs = 0;
+        if (camera.readQtPreviewFrame(frame, 500, &acquiredAtNs)) {
             vpssConsecutiveFailures = 0;
-            Q_EMIT frameReady(frame);
+            Q_EMIT frameReady(FrameEnvelope {frame, ++_frameSequence, acquiredAtNs});
             msleep(50);
             continue;
         }
@@ -392,6 +393,7 @@ void CameraStreamWorker::run()
             continue;
         }
         consecutiveFailures = 0;
+        const auto acquiredAtNs = monotonicNowNs();
 
         const unsigned int index = buffer.index;
         if (index >= bufferCount) {
@@ -424,7 +426,7 @@ void CameraStreamWorker::run()
 
         cv::Mat bgrFrame;
         cv::cvtColor(yuv, bgrFrame, cv::COLOR_YUV2BGR_NV12);
-        Q_EMIT frameReady(bgrFrame.clone());
+        Q_EMIT frameReady(FrameEnvelope {bgrFrame, ++_frameSequence, acquiredAtNs});
 
         if (!queueBuffer(fd, bufferType, multiPlanar, index, planeCount)) {
             Q_EMIT streamError(

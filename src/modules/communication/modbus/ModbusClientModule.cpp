@@ -6,6 +6,7 @@ CommunicationModule modbusClientModule()
 {
     CommunicationModule m;
     m.id = "modbus_tcp_client";
+    m.asynchronousDelivery = true;
     m.name = "Modbus TCP Client";
     m.description = "相机主动连接服务器，写入判定和检测序号。";
     m.help = "保持寄存器 0：1=OK、2=NG、3=ERROR；寄存器 1：检测序号低 16 位。";
@@ -33,7 +34,8 @@ CommunicationModule modbusClientModule()
         const quint16 verdict = status == "OK" ? 1 : status == "NG" ? 2 : 3;
         const auto n = result["sequence"].toDouble();
         const quint16 sequence = std::isfinite(n) && n >= 0 ? quint16(std::fmod(n, 65536.0)) : 0;
-        return ModTcpOutputService::instance().publish(verdict, sequence, error);
+        return ModTcpOutputService::instance().publish(verdict, sequence, error,
+            result["inspectionId"].toString(), result["sequenceText"].toString());
     };
     m.observe = [](QObject* owner, std::function<void()> changed, std::function<void(QString)> error) {
         auto& s = ModTcpOutputService::instance();

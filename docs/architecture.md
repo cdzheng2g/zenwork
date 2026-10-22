@@ -28,8 +28,8 @@ CameraStreamService ──最新帧──> InspectionService
 内部定时 / 手动按钮 / Modbus ──共同准入规则
                                    ↓
                       冻结本轮方案、图像与基准图
-                                   ↓ 后台线程
-                         InspectionRunner
+                                   ↓ 固定执行线程 / 本地 IPC
+                       独立进程 InspectionRunner
                                    ↓
                 OperatorRegistry → 算子输出 fields
                                    ↓
@@ -37,7 +37,9 @@ CameraStreamService ──最新帧──> InspectionService
                                    ↓
                        LogicEvaluator → 总判定
                                    ↓ 主线程
-        当前方案仍有效 → 结果输出、记录、界面显示
+        当前方案仍有效 → 输出交付追踪、界面显示
+                                   ↓ 有界队列
+                          独立存档线程写盘
 ```
 
 检测期间不排队堆积新任务；正在执行时返回 Busy。切换方案或取消有效运行上下文会使旧任务结果失效。
@@ -74,7 +76,7 @@ OCR 已复用通用编辑器；模板定位仍保留专用编辑器。文件参�
 - `application/operators/OperatorResources`：指定资源路径和打包默认路径解析。
 
 OCR 仅保留自身的文字检测、识别预处理、字典和 CTC 解码，不再直接调用 RKNN SDK 或实现独立 ROI 页面。
-模型会话在工作线程内复用，失败的新模型初始化不会破坏原会话。
+独立检测进程串行执行，模型会话按路径使用有界 LRU 缓存；借用中的上下文不被淘汰。失败的新模型不发布进缓存。
 新模型的前处理约定和输出解码仍由模型适配器负责；通用会话没有假设所有检测模型都与 OCR 一样。
 详细扩展教程和当前代码入口见 [adding-detection.md](adding-detection.md)。
 
@@ -87,3 +89,9 @@ OCR 仅保留自身的文字检测、识别预处理、字典和 CTC 解码，�
 这是编译时注册的模块化单体，不是运行时加载 `.so` 的插件系统。增加模块后仍需重新编译。
 当前仍为串行检测；多 OCR 实例已支持，模板定位保留一个共享坐标系，因此一个方案只允许一个定位算子。
 本轮没有增加流程图、并行图调度或多定位坐标绑定。
+
+## 协调、激活与故障边界
+
+工作台发出操作意图，InspectionCoordinator 统一处理编辑、暂停、文件事务与三种触发；SchemeActivationService 通过注入后端应用相机和通信设置，激活失败后阻止检测。app 层连接具体硬件和 Qt 网络对象。
+
+FrameEnvelope 包含帧编号和主机获取时刻，InspectionTrace 贯穿线程与子进程。交付事件带检测 UUID 和完整序号，检测判定与输出状态独立记录。详细进程线程图、上限及限制见 README 和 reliability-improvements.md。

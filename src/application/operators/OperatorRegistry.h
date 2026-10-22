@@ -19,6 +19,8 @@ struct OperatorDefinition {
     bool allowsMultiple { true };
     std::function<QString(const QJsonObject&)> validate;
     std::optional<ImageInputSpec> imageInput;
+    int currentVersion {1};
+    std::function<QString(SchemeTool&)> migrate;
 };
 class OperatorRegistry {
 public:
@@ -26,4 +28,5 @@ public:
     static const OperatorDefinition* find(const QString& kind);
     static SchemeTool makeTool(const QString& kind);
     static QString validate(const SchemeTool& tool);
+    static QString migrate(SchemeTool& tool);
 };

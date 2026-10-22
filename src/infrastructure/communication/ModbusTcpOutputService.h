@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QtGlobal>
+#include "contracts/DeliveryEvent.h"
 
 class QModbusTcpClient;
 
@@ -17,13 +18,15 @@ public:
     void disconnectFromServer();
 
     bool isConnected() const;
-    bool publish(quint16 verdict, quint16 sequence, QString* error = nullptr);
+    bool publish(quint16 verdict, quint16 sequence, QString* error = nullptr,
+        const QString& inspectionId = {}, const QString& sequenceText = {});
     bool isConnecting() const;
     static ModTcpOutputService& instance();
 signals:
     void connectionChanged(bool connected);
     void errorOccurred(const QString& error);
     void writeFinished(bool success, const QString& message);
+    void deliveryFinished(const DeliveryEvent& event);
 
 private:
     void onStateChanged();

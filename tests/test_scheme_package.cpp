@@ -53,7 +53,10 @@ int main(int argc, char** argv)
     const QString exported = target.path() + "/portable.yaml";
     check(p.save(exported, &error, true), "export full YAML with reference and all OCR resources");
     const QString light = target.path() + "/light.yaml";
-    check(p.save(light, &error), "export lightweight YAML and register shared models once");
+    const bool lightSaved = p.save(light, &error);
+    if (!lightSaved) std::fprintf(stderr, "Lightweight export failed: %s (appData=%s)\n",
+        error.toUtf8().constData(), QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toUtf8().constData());
+    check(lightSaved, "export lightweight YAML and register shared models once");
     QJsonObject lightDocument;
     YamlDocument::read(light, lightDocument, &error);
     check(lightDocument.value("formatVersion").toInt() == 3
@@ -106,8 +109,10 @@ int main(int argc, char** argv)
         "server/client communication parameters survive portable export/import");
     lightweight.settings.modbusTriggerEnabled = true;
     lightweight.settings.outputChannels = QStringList { QStringLiteral("modbus_tcp_server") };
-    check(lightweight.save(target.path() + "/modbus.yaml", &error)
-            && SchemePackage::load(target.path() + "/modbus.yaml", lightweight, &error)
+    const bool modbusSaved = lightweight.save(target.path() + "/modbus.yaml", &error);
+    const bool modbusLoaded = modbusSaved && SchemePackage::load(target.path() + "/modbus.yaml", lightweight, &error);
+    if (!modbusSaved || !modbusLoaded) std::fprintf(stderr, "Modbus YAML round trip failed: %s\n", error.toUtf8().constData());
+    check(modbusLoaded
             && lightweight.settings.modbusTriggerEnabled
             && lightweight.settings.outputChannels.contains("modbus_tcp_server"),
         "Modbus trigger and communication survive portable YAML export/import");

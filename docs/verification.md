@@ -66,3 +66,15 @@ python3 scripts/count_code.py \
   --baseline /tronlong/HansAiCameraApp-source-backup-20261016.tar.gz \
   --output docs/code-counts.json
 ```
+
+
+## 2026-10-22 九项可靠性与分层改进验证
+
+本节为本轮验证，前文 2026-10-16 的记录保留为历史记录。
+
+- 云服务器 Ubuntu 本机完整构建通过。
+- QT_QPA_PLATFORM=offscreen ctest --test-dir build_host --output-on-failure --timeout 45：22/22 通过，0 失败，总耗时 2.55 秒。
+- cmake --build build_rk3576 --target HansAiCameraApp -j2：通过，退出码 0。
+- file 确认产物为 ARM aarch64 ELF；CMakeCache 中 RKNN、AIQ、Rockit 库路径均已找到。
+- git diff --cached --check 通过；build_host 与 build_rk3576 中 Git 跟踪文件数为 0，实际构建目录保留。
+- 本轮未部署到板子；真实相机故障恢复、NPU 驱动故障、长期生产及 PLC 业务握手仍需板端验收。

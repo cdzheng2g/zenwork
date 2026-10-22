@@ -2,6 +2,7 @@
 
 #include "infrastructure/camera/CameraStreamWorker.h"
 #include "infrastructure/camera/CameraController.h"
+#include "infrastructure/camera/CameraRecovery.h"
 
 #include <QTimer>
 
@@ -23,22 +24,55 @@ CameraStreamService::CameraStreamService()
     _worker = new CameraStreamWorker(this);
     _worker->setDevice(QString::fromUtf8(kCameraDevice));
     _worker->setResolution(kCameraWidth, kCameraHeight);
+    _recovery = new CameraRecovery(
+        [this] {
+            if (_worker->isRunning()) return false;
+            _lastError.clear();
+#ifdef HAVE_ROCKIT_MPI
+            auto& camera = CameraController::instance();
+            camera.stopQtFrameStream();
+            if (!camera.isInitialized() && !camera.initialize()) return false;
+            if (!camera.startQtFrameStream(kCameraWidth, kCameraHeight)) return false;
+#endif
+            _worker->startCapture();
+            return true;
+        },
+        [this] {
+            _worker->stop();
+            CameraController::instance().stopQtFrameStream();
+        }, this);
+    connect(_recovery, &CameraRecovery::stateChanged, this, [this](bool ready) {
+        if (!ready) (void)_frames.takeFrame();
+        emit cameraStateChanged(ready);
+    });
+    connect(_recovery, &CameraRecovery::errorOccurred, this, &CameraStreamService::streamError);
     connect(
         _worker, &CameraStreamWorker::frameReady, this,
-        [this](const cv::Mat& frame) {
-            if (!_frames.offer(frame))
+        [this](const FrameEnvelope& frame) {
+            if (!_frames.offerFrame(frame))
                 return;
             QMetaObject::invokeMethod(
                 this,
                 [this] {
-                    const auto latest = _frames.take();
-                    if (!latest.empty())
-                        Q_EMIT frameReady(latest);
+                    const auto latest = _frames.takeFrame();
+                    if (!latest.image.empty()) {
+                        _recovery->frameReceived();
+                        Q_EMIT frameAvailable(latest);
+                        Q_EMIT frameReady(latest.image);
+                    }
                 },
                 Qt::QueuedConnection);
         },
         Qt::DirectConnection);
-    connect(_worker, &CameraStreamWorker::streamError, this, &CameraStreamService::streamError);
+    connect(_worker, &CameraStreamWorker::streamError, this, [this](const QString& reason) {
+        _lastError = reason;
+        emit streamError(reason);
+        emit cameraStateChanged(false);
+    });
+    connect(_worker, &QThread::finished, this, [this] {
+        // A queued finished signal can belong to a stream already stopped and restarted.
+        if (!_worker->isRunning()) _recovery->workerStopped(_lastError);
+    });
 
     _stopTimer = new QTimer(this);
     _stopTimer->setSingleShot(true);
@@ -49,18 +83,8 @@ void CameraStreamService::acquire()
 {
     const bool shouldStart = _lease.acquire();
     _stopTimer->stop();
-    if (shouldStart) {
-#ifdef HAVE_ROCKIT_MPI
-        // Rockit的AIQ、VI、VPSS初始化必须保持在调用initialize()的Qt主线程。
-        // 参考cam_ctl也是在主线程按此顺序完成，工作线程仅GetChnFrame。
-        if (!CameraController::instance().startQtFrameStream(kCameraWidth, kCameraHeight)) {
-            _lease.release();
-            Q_EMIT streamError(QStringLiteral("启动AIQ/VI/VPSS预览链路失败"));
-            return;
-        }
-#endif
-        _worker->startCapture();
-    }
+    // Demand survives a failed start; recovery state is independent of lease count.
+    if (shouldStart) _recovery->setDemand(true);
 }
 
 void CameraStreamService::release()
@@ -82,14 +106,16 @@ void CameraStreamService::shutdown()
     _stopTimer->stop();
     _lease = CameraStreamLease { };
     _applicationLeaseHeld = false;
-    _worker->stop();
-    CameraController::instance().stopQtFrameStream();
+    _recovery->setDemand(false);
 }
 
 void CameraStreamService::stopWhenUnused()
 {
     if (_lease.consumerCount() == 0) {
-        _worker->stop();
-        CameraController::instance().stopQtFrameStream();
+        _recovery->setDemand(false);
     }
+}
+void CameraStreamService::retry()
+{
+    _recovery->retry();
 }

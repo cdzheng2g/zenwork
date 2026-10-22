@@ -7,6 +7,7 @@ struct CommunicationModule {
     ParameterSchema parameters;
     bool listener { false };
     bool triggerInput { false };
+    bool asynchronousDelivery { false };
     std::function<bool(const QJsonObject&, QString*)> start;
     std::function<void()> stop;
     std::function<QString()> status;

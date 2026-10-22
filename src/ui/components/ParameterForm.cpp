@@ -31,7 +31,8 @@ ParameterForm::ParameterForm(const ParameterSchema& schema, QWidget* parent)
             field = input;
         } else if (p.kind == ParameterKind::Choice) {
             auto* input = new QComboBox(this);
-            input->addItems(p.choices);
+            for (const auto& choice : p.choices)
+                input->addItem(p.choiceLabels.value(choice, choice), choice);
             connect(input, qOverload<int>(&QComboBox::currentIndexChanged), this, &ParameterForm::changed);
             field = input;
         } else if (p.kind == ParameterKind::File) {
@@ -61,7 +62,7 @@ QJsonObject ParameterForm::configuration() const
         else if (p.kind == ParameterKind::Boolean)
             values[p.key] = static_cast<ToggleField*>(w)->isChecked();
         else if (p.kind == ParameterKind::Choice)
-            values[p.key] = static_cast<QComboBox*>(w)->currentText();
+            values[p.key] = static_cast<QComboBox*>(w)->currentData().toString();
         else if (p.kind == ParameterKind::File)
             values[p.key] = static_cast<FileParameterField*>(w)->value();
         else
@@ -82,7 +83,7 @@ void ParameterForm::setConfiguration(const QJsonObject& values)
         else if (p.kind == ParameterKind::Boolean)
             static_cast<ToggleField*>(w)->setChecked(v.toBool());
         else if (p.kind == ParameterKind::Choice)
-            static_cast<QComboBox*>(w)->setCurrentText(v.toString());
+            static_cast<QComboBox*>(w)->setCurrentIndex(static_cast<QComboBox*>(w)->findData(v.toString()));
         else if (p.kind == ParameterKind::File)
             static_cast<FileParameterField*>(w)->setValue(v.toString());
         else

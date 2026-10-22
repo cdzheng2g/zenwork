@@ -23,7 +23,7 @@ public:
     quint16 port() const;
     int clientCount() const;
 
-    void broadcastJson(const QJsonObject& object);
+    bool broadcastJson(const QJsonObject& object, QString* error = nullptr);
 
 Q_SIGNALS:
     void clientCountChanged(int count);

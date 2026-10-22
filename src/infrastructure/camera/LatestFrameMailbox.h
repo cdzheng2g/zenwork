@@ -2,11 +2,16 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <opencv2/core.hpp>
+#include "contracts/FrameEnvelope.h"
 
 // At most one queued delivery and one retained camera frame, even if UI is busy.
 class LatestFrameMailbox {
 public:
     bool offer(const cv::Mat& frame)
+    {
+        return offerFrame({frame, 0, monotonicNowNs()});
+    }
+    bool offerFrame(const FrameEnvelope& frame)
     {
         QMutexLocker lock(&_mutex);
         _latest = frame;
@@ -17,14 +22,18 @@ public:
     }
     cv::Mat take()
     {
+        return takeFrame().image;
+    }
+    FrameEnvelope takeFrame()
+    {
         QMutexLocker lock(&_mutex);
-        cv::Mat result = std::move(_latest);
+        FrameEnvelope result = std::move(_latest);
         _pending = false;
         return result;
     }
 
 private:
     QMutex _mutex;
-    cv::Mat _latest;
+    FrameEnvelope _latest;
     bool _pending { false };
 };

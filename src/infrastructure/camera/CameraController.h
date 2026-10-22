@@ -57,7 +57,7 @@ public:
     // VO硬件图层，以免覆盖正在运行的Qt桌面。readPreviewFrame()返回独立持有的
     // BGR图像，可安全地经Qt排队信号交给界面线程。
     bool startQtFrameStream(int width, int height);
-    bool readQtPreviewFrame(cv::Mat& frame, int timeoutMs);
+    bool readQtPreviewFrame(cv::Mat& frame, int timeoutMs, qint64* acquiredAtNs = nullptr);
     void stopQtFrameStream();
     bool isQtFrameStreamRunning() const
     {

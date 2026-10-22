@@ -2,11 +2,14 @@
 #include "application/operators/OperatorRegistry.h"
 #include <QtConcurrent/QtConcurrentRun>
 #include <exception>
+#include <QUuid>
 InspectionService::InspectionService(Executor executor, ResultSink sink, QObject* parent, int timeoutMs)
     : QObject(parent)
     , _executor(std::move(executor))
     , _sink(std::move(sink))
 {
+    _pool.setMaxThreadCount(1);
+    _pool.setExpiryTimeout(-1);
     connect(&_worker, &QFutureWatcher<QJsonObject>::finished, this, &InspectionService::complete);
     _deadline.setSingleShot(true);
     _deadline.setInterval(qMax(1, timeoutMs));
@@ -15,6 +18,7 @@ InspectionService::InspectionService(Executor executor, ResultSink sink, QObject
         if (!_active || _worker.isFinished())
             return;
         _timedOut = true;
+        if (_cancelled) _cancelled->store(true);
         latchFault(QStringLiteral("检测超时，已停止接收新任务；等待后台结束后请重启应用恢复"));
     });
 }
@@ -28,7 +32,20 @@ void InspectionService::latchFault(const QString& reason)
 }
 InspectionService::~InspectionService()
 {
+    shutdown();
+}
+void InspectionService::shutdown()
+{
+    if (!_shuttingDown) {
+        _shuttingDown = true;
+        invalidate();
+    }
+    _deadline.stop();
+    if (_cancelled) _cancelled->store(true);
     _worker.waitForFinished();
+    _pool.waitForDone();
+    if (_active) _discarded = true;
+    _active = false;
 }
 void InspectionService::waitForFinished()
 {
@@ -36,16 +53,33 @@ void InspectionService::waitForFinished()
 }
 void InspectionService::updateFrame(const cv::Mat& frame)
 {
-    _frame = frame.clone();
-    _frameAge.restart();
+    updateFrame(FrameEnvelope {frame, ++_localFrameId, monotonicNowNs()});
+}
+void InspectionService::updateFrame(const FrameEnvelope& frame)
+{
+    _frame = frame;
+    _frame.image = frame.image.clone();
+}
+void InspectionService::clearFrame()
+{
+    _frame = {};
+}
+void InspectionService::recordDelivery(const DeliveryEvent& event)
+{
+    if (_result["inspectionId"].toString() == event.inspectionId) {
+        auto delivery = _result["delivery"].toObject();
+        delivery[event.channel] = event.toJson();
+        _result["delivery"] = delivery;
+    }
+    emit deliveryUpdated(event);
 }
 bool InspectionService::hasFreshFrame() const
 {
-    return !_frame.empty() && _frameAge.isValid() && _frameAge.elapsed() < 1500;
+    return _frame.fresh();
 }
 TriggerDecision InspectionService::admission(TriggerSource source, const InspectionGate& gate) const
 {
-    if (_recoveryRequired)
+    if (_recoveryRequired || _shuttingDown)
         return TriggerDecision::NotReady;
     return triggerDecision(source, gate, _active, hasFreshFrame());
 }
@@ -73,8 +107,12 @@ TriggerDecision InspectionService::start(InspectionRequest request, TriggerSourc
         request.tools = selected;
         request.settings.logicOr = false;
     }
-    request.image = _frame.clone();
+    request.image = _frame.image.clone();
     request.reference.image = request.reference.image.clone();
+    request.trace = {QUuid::createUuid().toString(QUuid::WithoutBraces), _frame.id,
+        _generation, _frame.acquiredAtNs, monotonicNowNs(), 0};
+    _cancelled = std::make_shared<std::atomic_bool>(false);
+    request.cancelled = _cancelled;
     _request = request;
     _toolTest = !toolId.isEmpty();
     _runningGeneration = _generation;
@@ -84,24 +122,37 @@ TriggerDecision InspectionService::start(InspectionRequest request, TriggerSourc
     _discarded = false;
     _deliveryErrors.clear();
     const auto executor = _executor;
-    _worker.setFuture(QtConcurrent::run([request, executor] {
+    _worker.setFuture(QtConcurrent::run(&_pool, [request, executor]() mutable {
+        request.trace.workerStartedAtNs = monotonicNowNs();
+        QJsonObject result;
         try {
-            return executor(request);
+            result = executor(request);
         } catch (const std::exception& e) {
-            return QJsonObject { { "scheme", request.scheme }, { "status", "ERROR" },
+            result = QJsonObject { { "scheme", request.scheme }, { "status", "ERROR" },
                 { "error", QString::fromUtf8(e.what()) } };
         } catch (...) {
-            return QJsonObject { { "scheme", request.scheme }, { "status", "ERROR" },
+            result = QJsonObject { { "scheme", request.scheme }, { "status", "ERROR" },
                 { "error", "检测执行异常" } };
         }
+        result["inspectionId"] = request.trace.inspectionId;
+        result["trace"] = request.trace.toJson();
+        return result;
     }));
     _deadline.start();
     return TriggerDecision::Accepted;
 }
 void InspectionService::complete()
 {
+    // A completion event can still be queued when shutdown has already joined the worker.
+    if (!_active) return;
     _deadline.stop();
     _result = _worker.result();
+    const auto trace = InspectionTrace::fromJson(_result["trace"].toObject());
+    _result["timings"] = QJsonObject {
+        {"frameAgeAtTriggerMs", double(trace.acceptedAtNs - trace.acquiredAtNs) / 1e6},
+        {"queueMs", double(trace.workerStartedAtNs - trace.acceptedAtNs) / 1e6},
+        {"algorithmMs", _result["elapsedMs"].toDouble()},
+        {"completionMs", double(monotonicNowNs() - trace.acceptedAtNs) / 1e6}};
     if (_timedOut) {
         _result["status"] = "ERROR";
         _result["error"] = _recoveryReason;
