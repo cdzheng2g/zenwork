@@ -3,7 +3,14 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
+#include <string>
 #include <vector>
+
+class RknnTimeout final : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
 
 enum class TensorLayout { Nchw, Nhwc, Other };
 enum class TensorInputType { UInt8, Int8, Float16, Float32 };
@@ -47,4 +54,5 @@ public:
 private:
     struct Impl;
     std::unique_ptr<Impl> _impl;
+    int _runTimeoutMs { 30000 };
 };

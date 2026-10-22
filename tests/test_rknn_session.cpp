@@ -13,6 +13,8 @@ std::map<rknn_context, char> contexts;
 rknn_context nextContext = 0;
 int initializations = 0, releases = 0, submitted = 0;
 bool malformedOutput = false;
+int runStatus = 0, outputStatus = 0, runCalls = 0;
+int observedTimeout = 0;
 }
 
 // Deterministic SDK substitute: exercise the real session implementation without an NPU.
@@ -61,9 +63,16 @@ int rknn_inputs_set(rknn_context, uint32_t count, rknn_input inputs[])
     submitted = int(count);
     return count == 2 && inputs[0].size == 4 && inputs[1].index == 1 ? 0 : -3;
 }
-int rknn_run(rknn_context, rknn_run_extend*) { return 0; }
+int rknn_run(rknn_context, rknn_run_extend* options)
+{
+    ++runCalls;
+    observedTimeout = options ? options->timeout_ms : 0;
+    return options && options->non_block == 0 && options->fence_fd == -1 ? runStatus : RKNN_ERR_PARAM_INVALID;
+}
 int rknn_outputs_get(rknn_context, uint32_t count, rknn_output outputs[], rknn_output_extend*)
 {
+    if (outputStatus != 0)
+        return outputStatus;
     for (uint32_t i = 0; i < count; ++i) {
         if (!outputs[i].want_float || outputs[i].index != i)
             return -4;
@@ -84,6 +93,7 @@ int rknn_outputs_release(rknn_context, uint32_t count, rknn_output outputs[])
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
+    qputenv("HANS_RKNN_RUN_TIMEOUT_MS", "1234");
     QTemporaryDir directory;
     int failures = 0;
     auto check = [&](bool ok, const char* label) {
@@ -136,5 +146,24 @@ int main(int argc, char** argv)
         check(rejected && releases == before + 1, "invalid output also releases every SDK buffer");
     }
     check(contexts.empty(), "session destructor releases the live model");
+    check(observedTimeout == 1234, "blocking RKNN call receives the configured finite timeout");
+    malformedOutput = false;
+    for (const bool timeoutDuringRun : {true, false}) {
+        RknnSession session;
+        session.load(good);
+        runStatus = timeoutDuringRun ? RKNN_ERR_TIMEOUT : 0;
+        outputStatus = timeoutDuringRun ? 0 : RKNN_ERR_TIMEOUT;
+        bool rejected = false;
+        try { session.run(inputs); } catch (const RknnTimeout&) { rejected = true; }
+        check(rejected, "SDK run/output timeout is a typed recovery fault");
+        const int before = runCalls;
+        rejected = false;
+        try { session.run(inputs); } catch (const RknnTimeout&) { rejected = true; }
+        check(rejected && before == runCalls, "timed-out context is never submitted again");
+        rejected = false;
+        try { session.load(good); } catch (const RknnTimeout&) { rejected = true; }
+        check(rejected, "reloading cannot silently clear a timed-out context");
+    }
+    check(contexts.empty(), "timed-out sessions are released on their owning thread");
     return failures ? 1 : 0;
 }

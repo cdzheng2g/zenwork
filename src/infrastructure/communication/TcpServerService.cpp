@@ -38,7 +38,7 @@ void TcpServerService::stop()
 {
     const auto clients = _clients;
     for (QTcpSocket* client : clients)
-        client->disconnectFromHost();
+        client->abort();
     _clients.clear();
     _server->close();
     Q_EMIT clientCountChanged(0);
@@ -62,16 +62,52 @@ int TcpServerService::clientCount() const
 void TcpServerService::broadcastJson(const QJsonObject& object)
 {
     const QByteArray payload = QJsonDocument(object).toJson(QJsonDocument::Compact) + '\n';
-    for (QTcpSocket* client : _clients)
-        client->write(payload);
+    if (payload.size() > MaximumPendingBytes) {
+        Q_EMIT errorOccurred(QStringLiteral("TCP 结果超过单条发送上限，未发送"));
+        return;
+    }
+    // abort() may synchronously remove a client through disconnected().
+    const auto clients = _clients;
+    for (QTcpSocket* client : clients) {
+        if (client->state() != QAbstractSocket::ConnectedState)
+            continue;
+        if (client->bytesToWrite() > MaximumPendingBytes - payload.size()) {
+            rejectClient(client, QStringLiteral("TCP 客户端发送积压超过上限，已断开"));
+            continue;
+        }
+        if (client->write(payload) != payload.size())
+            rejectClient(client, QStringLiteral("TCP 结果提交不完整，已断开客户端"));
+    }
+}
+
+void TcpServerService::rejectClient(QTcpSocket* client, const QString& reason)
+{
+    // Do not wait for a slow peer to drain pending output during rejection.
+    client->abort();
+    Q_EMIT errorOccurred(reason);
 }
 
 void TcpServerService::onNewConnection()
 {
     while (_server->hasPendingConnections()) {
         QTcpSocket* client = _server->nextPendingConnection();
+        if (!client)
+            continue;
+        if (_clients.size() >= MaximumClients) {
+            client->abort();
+            client->deleteLater();
+            Q_EMIT errorOccurred(QStringLiteral("TCP 已达到最大客户端数量，拒绝新连接"));
+            continue;
+        }
+        client->setReadBufferSize(MaximumReadBytes);
         connect(client, &QTcpSocket::disconnected, this, &TcpServerService::onClientDisconnected);
         _clients.append(client);
+        // This endpoint only publishes JSON lines; inbound application data is invalid.
+        connect(client, &QTcpSocket::readyRead, this, [this, client] {
+            rejectClient(client, QStringLiteral("TCP 结果通道不接受输入数据，已断开客户端"));
+        });
+        if (client->bytesAvailable() > 0)
+            rejectClient(client, QStringLiteral("TCP 结果通道不接受输入数据，已断开客户端"));
     }
     Q_EMIT clientCountChanged(_clients.size());
 }

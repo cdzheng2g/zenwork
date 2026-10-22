@@ -2,12 +2,29 @@
 #include "application/operators/OperatorRegistry.h"
 #include <QtConcurrent/QtConcurrentRun>
 #include <exception>
-InspectionService::InspectionService(Executor executor, ResultSink sink, QObject* parent)
+InspectionService::InspectionService(Executor executor, ResultSink sink, QObject* parent, int timeoutMs)
     : QObject(parent)
     , _executor(std::move(executor))
     , _sink(std::move(sink))
 {
     connect(&_worker, &QFutureWatcher<QJsonObject>::finished, this, &InspectionService::complete);
+    _deadline.setSingleShot(true);
+    _deadline.setInterval(qMax(1, timeoutMs));
+    connect(&_deadline, &QTimer::timeout, this, [this] {
+        // A delayed GUI callback must not fault a task that has already returned.
+        if (!_active || _worker.isFinished())
+            return;
+        _timedOut = true;
+        latchFault(QStringLiteral("检测超时，已停止接收新任务；等待后台结束后请重启应用恢复"));
+    });
+}
+void InspectionService::latchFault(const QString& reason)
+{
+    if (_recoveryRequired)
+        return;
+    _recoveryRequired = true;
+    _recoveryReason = reason;
+    emit faulted(reason);
 }
 InspectionService::~InspectionService()
 {
@@ -28,6 +45,8 @@ bool InspectionService::hasFreshFrame() const
 }
 TriggerDecision InspectionService::admission(TriggerSource source, const InspectionGate& gate) const
 {
+    if (_recoveryRequired)
+        return TriggerDecision::NotReady;
     return triggerDecision(source, gate, _active, hasFreshFrame());
 }
 TriggerDecision InspectionService::start(InspectionRequest request, TriggerSource source,
@@ -61,6 +80,7 @@ TriggerDecision InspectionService::start(InspectionRequest request, TriggerSourc
     _runningGeneration = _generation;
     _skipped = skipped;
     _active = true;
+    _timedOut = false;
     _discarded = false;
     _deliveryErrors.clear();
     const auto executor = _executor;
@@ -75,11 +95,20 @@ TriggerDecision InspectionService::start(InspectionRequest request, TriggerSourc
                 { "error", "检测执行异常" } };
         }
     }));
+    _deadline.start();
     return TriggerDecision::Accepted;
 }
 void InspectionService::complete()
 {
+    _deadline.stop();
     _result = _worker.result();
+    if (_timedOut) {
+        _result["status"] = "ERROR";
+        _result["error"] = _recoveryReason;
+        _result["recoveryRequired"] = true;
+    }
+    if (_result["recoveryRequired"].toBool())
+        latchFault(_result["error"].toString(QStringLiteral("推理故障，请重启应用恢复")));
     _discarded = _runningGeneration != _generation;
     if (!_discarded && !_toolTest) {
         _result["sequence"] = double(++_sequence);

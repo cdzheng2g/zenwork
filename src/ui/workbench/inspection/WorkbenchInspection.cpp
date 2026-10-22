@@ -25,8 +25,9 @@ bool WorkbenchWidget::executeInspection(TriggerSource source, const QString& too
     if (decision != TriggerDecision::Accepted) {
         if (!_inspection->isRunning())
             _internalTrigger->finishExecution();
-        _statusLabel->setText(decision == TriggerDecision::Busy ? "正在检测，请稍后重试"
-                                                                : "未就绪，请检查方案、编辑状态和相机画面");
+        _statusLabel->setText(_inspection->requiresRecovery() ? _inspection->recoveryReason()
+            : decision == TriggerDecision::Busy ? QStringLiteral("正在检测，请稍后重试")
+                                               : QStringLiteral("未就绪，请检查方案、编辑状态和相机画面"));
         return false;
     }
     _statusLabel->setText("正在检测：" + request.scheme);
@@ -41,6 +42,11 @@ void WorkbenchWidget::completeInspection()
         return;
     const auto result = _inspection->result();
     _liveMonitorWidget->showInspection(result, _inspection->resultFrame(), _inspection->isToolTest());
+    if (_inspection->requiresRecovery()) {
+        _internalTrigger->stop();
+        _statusLabel->setText(_inspection->recoveryReason());
+        return;
+    }
     if (_inspection->isToolTest()) {
         _statusLabel->setText("单算子测试完成（含必要定位），不计入方案统计或输出");
         return;

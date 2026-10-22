@@ -3,6 +3,7 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QThread>
+#include <QSemaphore>
 #include <cstdio>
 int main(int argc, char** argv)
 {
@@ -61,5 +62,61 @@ int main(int argc, char** argv)
     wait();
     check(service.result()["sequence"].toInt() == 2 && deliveries == 2,
         "discarded and test results do not advance production sequence");
+    {
+        QSemaphore release;
+        int faults = 0, outputs = 0;
+        QString deliveredStatus;
+        InspectionService blocked(
+            [&](const InspectionRequest&) {
+                release.acquire();
+                return QJsonObject {{"status", "OK"}};
+            },
+            [&](const QStringList&, const QJsonObject& result) {
+                ++outputs;
+                deliveredStatus = result["status"].toString();
+                return QStringList {};
+            }, nullptr, 20);
+        QEventLoop deadlineLoop;
+        QObject::connect(&blocked, &InspectionService::faulted, &deadlineLoop, [&](const QString&) {
+            ++faults;
+            deadlineLoop.quit();
+        });
+        blocked.updateFrame(frame);
+        blocked.start(request, TriggerSource::Manual, gate);
+        QTimer::singleShot(1000, &deadlineLoop, &QEventLoop::quit);
+        deadlineLoop.exec();
+        check(blocked.requiresRecovery() && blocked.isRunning() && faults == 1 && outputs == 0,
+            "deadline latches a fault while the original executor is still running");
+        for (const auto source : {TriggerSource::Manual, TriggerSource::Internal, TriggerSource::Modbus})
+            check(blocked.start(request, source, gate) == TriggerDecision::NotReady,
+                "fault rejects every trigger source without starting overlapping work");
+        QEventLoop finishedLoop;
+        QObject::connect(&blocked, &InspectionService::finished, &finishedLoop, &QEventLoop::quit);
+        release.release();
+        QTimer::singleShot(1000, &finishedLoop, &QEventLoop::quit);
+        finishedLoop.exec();
+        check(!blocked.isRunning() && blocked.requiresRecovery() && deliveredStatus == "ERROR"
+                && outputs == 1 && faults == 1,
+            "late OK becomes one ERROR result and does not clear the recovery latch");
+        blocked.invalidate();
+        blocked.updateFrame(frame);
+        check(blocked.start(request, TriggerSource::Manual, gate) == TriggerDecision::NotReady,
+            "changing scheme or refreshing a frame cannot bypass a recovery fault");
+    }
+    {
+        InspectionService sdkFault(
+            [](const InspectionRequest&) {
+                return QJsonObject {{"status", "ERROR"}, {"recoveryRequired", true}, {"error", "SDK timeout"}};
+            }, {}, nullptr, 1000);
+        sdkFault.updateFrame(frame);
+        QEventLoop loop;
+        QObject::connect(&sdkFault, &InspectionService::finished, &loop, &QEventLoop::quit);
+        sdkFault.start(request, TriggerSource::Manual, gate);
+        QTimer::singleShot(1000, &loop, &QEventLoop::quit);
+        loop.exec();
+        check(sdkFault.requiresRecovery() && !sdkFault.isRunning()
+                && sdkFault.recoveryReason() == "SDK timeout",
+            "returned SDK fault locks inspection even before the application deadline");
+    }
     return failures ? 1 : 0;
 }

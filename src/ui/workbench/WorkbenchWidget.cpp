@@ -53,6 +53,11 @@ WorkbenchWidget::WorkbenchWidget(QWidget* parent)
     CameraStreamService::instance().retainForApplicationLifetime();
     _internalTrigger = new InternalTrigger(this);
     connect(_inspection, &InspectionService::finished, this, &WorkbenchWidget::completeInspection);
+    connect(_inspection, &InspectionService::faulted, this, [this](const QString& reason) {
+        _internalTrigger->stop();
+        refreshModbusState();
+        _statusLabel->setText(reason);
+    });
     connect(_internalTrigger, &InternalTrigger::triggered, this, [this] { executeInspection(); });
     connect(_liveMonitorWidget, &LiveMonitorWidget::runOnceRequested, this, [this] {
         if (_internalTrigger->tryBeginExecution())
@@ -69,7 +74,8 @@ WorkbenchWidget::WorkbenchWidget(QWidget* parent)
     connect(_liveMonitorWidget, &LiveMonitorWidget::pausedChanged, this, [this](bool paused) {
         _inspection->invalidate();
         applyTriggerSettings();
-        _statusLabel->setText(paused ? QStringLiteral("检测已暂停") : QStringLiteral("检测已恢复"));
+        _statusLabel->setText(_inspection->requiresRecovery() ? _inspection->recoveryReason()
+            : paused ? QStringLiteral("检测已暂停") : QStringLiteral("检测已恢复"));
     });
     connect(&CameraStreamService::instance(), &CameraStreamService::frameReady, this,
         [this](const cv::Mat& frame) { _inspection->updateFrame(frame); });

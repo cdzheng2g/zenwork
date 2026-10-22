@@ -3,7 +3,8 @@
 #include "infrastructure/communication/ModbusTcpServerService.h"
 bool WorkbenchWidget::modbusTriggerReady() const
 {
-    return triggerDecision(TriggerSource::Modbus, inspectionGate(), false, _inspection->hasFreshFrame())
+    return !_inspection->requiresRecovery()
+        && triggerDecision(TriggerSource::Modbus, inspectionGate(), false, _inspection->hasFreshFrame())
         == TriggerDecision::Accepted;
 }
 void WorkbenchWidget::refreshModbusState()

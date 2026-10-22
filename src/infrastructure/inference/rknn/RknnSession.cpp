@@ -67,13 +67,20 @@ struct RknnSession::Impl {
     std::vector<TensorInfo> inputInfo, outputInfo;
     QString path;
     qint64 size { 0 }, modified { 0 };
+    bool timedOut { false };
 #ifdef HAVE_RKNN
     rknn_context context { 0 };
     ~Impl() { if (context) rknn_destroy(context); }
 #endif
 };
 
-RknnSession::RknnSession() : _impl(std::make_unique<Impl>()) {}
+RknnSession::RknnSession() : _impl(std::make_unique<Impl>())
+{
+    bool valid = false;
+    const int value = qEnvironmentVariableIntValue("HANS_RKNN_RUN_TIMEOUT_MS", &valid);
+    if (valid && value >= 1 && value <= 600000)
+        _runTimeoutMs = value;
+}
 RknnSession::~RknnSession() = default;
 bool RknnSession::isLoaded() const { return !_impl->path.isEmpty(); }
 const std::vector<TensorInfo>& RknnSession::inputs() const { return _impl->inputInfo; }
@@ -82,6 +89,8 @@ const std::vector<TensorInfo>& RknnSession::outputs() const { return _impl->outp
 void RknnSession::load(const QString& path)
 {
 #ifdef HAVE_RKNN
+    if (_impl->timedOut)
+        throw RknnTimeout("RKNN 会话已超时，禁止重新加载，请重启应用恢复设备状态");
     const QFileInfo fileInfo(path);
     require(fileInfo.isFile() && fileInfo.size() > 0, "模型文件不存在或为空：" + path);
     const auto absolute = fileInfo.absoluteFilePath();
@@ -126,6 +135,8 @@ std::vector<TensorOutput> RknnSession::run(const std::vector<TensorInput>& input
 {
 #ifdef HAVE_RKNN
     require(isLoaded(), "尚未加载 RKNN 模型");
+    if (_impl->timedOut)
+        throw RknnTimeout("RKNN 会话已超时，禁止继续使用，请重启应用恢复设备状态");
     require(inputs.size() == _impl->inputInfo.size(), "输入张量数量与模型不一致");
     std::vector<rknn_input> nativeInputs(inputs.size());
     for (std::size_t index = 0; index < inputs.size(); ++index) {
@@ -143,13 +154,26 @@ std::vector<TensorOutput> RknnSession::run(const std::vector<TensorInput>& input
         target.fmt = source.layout == TensorLayout::Nchw ? RKNN_TENSOR_NCHW : RKNN_TENSOR_NHWC;
     }
     checked(rknn_inputs_set(_impl->context, uint32_t(nativeInputs.size()), nativeInputs.data()), "提交推理输入失败");
-    checked(rknn_run(_impl->context, nullptr), "模型推理失败");
+    rknn_run_extend runOptions {};
+    runOptions.timeout_ms = _runTimeoutMs;
+    runOptions.fence_fd = -1;
+    const int runStatus = rknn_run(_impl->context, &runOptions);
+    if (runStatus == RKNN_ERR_TIMEOUT) {
+        _impl->timedOut = true;
+        throw RknnTimeout("RKNN 推理超时，检测已锁定，请重启应用恢复设备状态");
+    }
+    checked(runStatus, "模型推理失败");
     std::vector<rknn_output> outputs(_impl->outputInfo.size());
     for (std::size_t index = 0; index < outputs.size(); ++index) {
         outputs[index].index = uint32_t(index);
         outputs[index].want_float = 1;
     }
-    checked(rknn_outputs_get(_impl->context, uint32_t(outputs.size()), outputs.data(), nullptr), "获取推理输出失败");
+    const int outputStatus = rknn_outputs_get(_impl->context, uint32_t(outputs.size()), outputs.data(), nullptr);
+    if (outputStatus == RKNN_ERR_TIMEOUT) {
+        _impl->timedOut = true;
+        throw RknnTimeout("RKNN 获取输出超时，检测已锁定，请重启应用恢复设备状态");
+    }
+    checked(outputStatus, "获取推理输出失败");
     struct OutputLease {
         rknn_context context;
         std::vector<rknn_output>& outputs;
